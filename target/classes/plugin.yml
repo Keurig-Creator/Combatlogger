@@ -1,0 +1,3 @@
+main: com.keurig.combatlogger.CombatLogger
+version: 1.0
+name: CombatLogger

@@ -1,0 +1,3 @@
+combat-timer: 10
+combat-message: '&5You are now on cooldown!'
+combat-off-message: '&dYou are out of combat!'
