@@ -25,7 +25,7 @@ public class JoinListener implements Listener {
 		Player player = e.getPlayer();
 
 		if (main.getCombatPlayer().getCombatLogged().containsKey(player.getUniqueId()) && main.getCombatPlayer().getCombatLogged().get(player.getUniqueId()) > System.currentTimeMillis()) {
-			main.getCombatPlayer().getCombatLogged().remove(player.getUniqueId());
+			main.getCombatPlayer().removePlayer(player);
 			player.setHealth(0);
 		}
 	}
