@@ -1,3 +1,4 @@
 com\keurig\combatlogger\CombatLogger.class
 com\keurig\combatlogger\listeners\AttackListener.class
+com\keurig\combatlogger\listeners\QuitListener.class
 com\keurig\combatlogger\listeners\AttackListener$1.class

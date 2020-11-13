@@ -1,3 +1,8 @@
+#Allows you to change the how many seconds the combat wears off at
 combat-timer: 10
+
+#The message for going in to combat
 combat-message: '&5You are now on cooldown!'
+
+#The message for going out of combat
 combat-off-message: '&dYou are out of combat!'
