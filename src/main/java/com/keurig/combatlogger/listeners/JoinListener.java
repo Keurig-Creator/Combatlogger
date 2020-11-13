@@ -24,12 +24,10 @@ public class JoinListener implements Listener {
 	public void onQuit(PlayerQuitEvent e) {
 		Player player = e.getPlayer();
 
-		main.getCombatPlayer().removePlayer(e.getPlayer());
-
-//		if (main.getCombatLogged().containsKey(player.getUniqueId()) && main.getCombatLogged().get(player.getUniqueId()) > System.currentTimeMillis()) {
-//			main.getCombatLogged().remove(player.getUniqueId());
-//			player.setHealth(0);
-//		}
+		if (main.getCombatPlayer().getCombatLogged().containsKey(player.getUniqueId()) && main.getCombatPlayer().getCombatLogged().get(player.getUniqueId()) > System.currentTimeMillis()) {
+			main.getCombatPlayer().getCombatLogged().remove(player.getUniqueId());
+			player.setHealth(0);
+		}
 	}
 
 }

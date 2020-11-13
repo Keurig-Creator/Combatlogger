@@ -28,7 +28,7 @@ public class CombatPlayer {
 
 	public void addCombat(final Player player, final Player target) {
 
-		if (combatLogged.containsKey(player.getUniqueId()) && combatLogged.get(player.getUniqueId()) > System.currentTimeMillis()) {
+		if (combatLogged.containsKey(player.getUniqueId()) && combatLogged.get(player.getUniqueId()) > System.currentTimeMillis() && combatLogged.containsKey(target.getUniqueId()) && combatLogged.get(target.getUniqueId()) > System.currentTimeMillis()) {
 			Bukkit.getScheduler().cancelTask(task);
 		} else {
 			final String inCombat = main.getConfig().getString("combat-message");
@@ -36,13 +36,13 @@ public class CombatPlayer {
 			player.sendMessage(ChatColor.translateAlternateColorCodes('&', inCombat));
 			target.sendMessage(ChatColor.translateAlternateColorCodes('&', inCombat));
 		}
+
 		final int combatTimer = main.getConfig().getInt("combat-timer");
 
 		combatLogged.put(player.getUniqueId(), System.currentTimeMillis() + (combatTimer * 1000));
 		combatLogged.put(target.getUniqueId(), System.currentTimeMillis() + (combatTimer * 1000));
 
 		final String outOfCombat = main.getConfig().getString("combat-off-message");
-
 
 		task = Bukkit.getScheduler().runTaskLater(main, new Runnable() {
 			public void run() {
