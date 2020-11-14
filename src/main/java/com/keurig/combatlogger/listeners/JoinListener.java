@@ -23,7 +23,7 @@ public class JoinListener implements Listener {
 	@EventHandler
 	public void onQuit(PlayerQuitEvent e) {
 		Player player = e.getPlayer();
-
+		
 		if (main.getCombatPlayer().getCombatLogged().containsKey(player.getUniqueId()) && main.getCombatPlayer().getCombatLogged().get(player.getUniqueId()) > System.currentTimeMillis()) {
 			main.getCombatPlayer().removePlayer(player);
 			player.setHealth(0);

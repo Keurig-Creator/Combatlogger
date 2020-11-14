@@ -15,12 +15,14 @@ public class CombatPlayer {
 
 	private final Set<UUID> players;
 
-	private int task;
+	private final Map<UUID, Integer> task;
 
 	public CombatPlayer(CombatLogger main) {
 		this.main = main;
 
 		combatLogged = new HashMap<UUID, Long>();
+		task = new HashMap<UUID, Integer>();
+
 		players = new HashSet<UUID>();
 
 		addOnlinePlayers();
@@ -28,36 +30,50 @@ public class CombatPlayer {
 
 	public void addCombat(final Player player, final Player target) {
 
-		if (combatLogged.containsKey(player.getUniqueId()) && combatLogged.get(player.getUniqueId()) > System.currentTimeMillis() && combatLogged.containsKey(target.getUniqueId()) && combatLogged.get(target.getUniqueId()) > System.currentTimeMillis()) {
-			Bukkit.getScheduler().cancelTask(task);
-		} else {
-			final String inCombat = main.getConfig().getString("combat-message");
+		// Get combat message
+		final String inCombat = main.getConfig().getString("combat-message");
+		assert inCombat != null;
 
+		if (combatLogged.containsKey(player.getUniqueId()) && combatLogged.get(player.getUniqueId()) > System.currentTimeMillis()) {
+			Bukkit.getScheduler().cancelTask(task.get(player.getUniqueId()));
+		} else {
 			player.sendMessage(ChatColor.translateAlternateColorCodes('&', inCombat));
+		}
+
+		if (combatLogged.containsKey(target.getUniqueId()) && combatLogged.get(target.getUniqueId()) > System.currentTimeMillis()) {
+			Bukkit.getScheduler().cancelTask(task.get(target.getUniqueId()));
+		} else {
 			target.sendMessage(ChatColor.translateAlternateColorCodes('&', inCombat));
 		}
 
+		// Get combat timer
 		final int combatTimer = main.getConfig().getInt("combat-timer");
 
+		// Add attacker and target to combatLogged
 		combatLogged.put(player.getUniqueId(), System.currentTimeMillis() + (combatTimer * 1000));
 		combatLogged.put(target.getUniqueId(), System.currentTimeMillis() + (combatTimer * 1000));
 
+		// Get combat off message
 		final String outOfCombat = main.getConfig().getString("combat-off-message");
+		assert outOfCombat != null;
 
-		task = Bukkit.getScheduler().runTaskLater(main, new Runnable() {
+		task.put(player.getUniqueId(), Bukkit.getScheduler().runTaskLater(main, new Runnable() {
 			public void run() {
 				if (combatLogged.containsKey(player.getUniqueId())) {
 					combatLogged.remove(player.getUniqueId());
 					player.sendMessage(ChatColor.translateAlternateColorCodes('&', outOfCombat));
 				}
+			}
+		}, 20 * combatTimer).getTaskId());
 
+		task.put(target.getUniqueId(), Bukkit.getScheduler().runTaskLater(main, new Runnable() {
+			public void run() {
 				if (combatLogged.containsKey(target.getUniqueId())) {
 					combatLogged.remove(target.getUniqueId());
 					target.sendMessage(ChatColor.translateAlternateColorCodes('&', outOfCombat));
 				}
-
 			}
-		}, 20 * combatTimer).getTaskId();
+		}, 20 * combatTimer).getTaskId());
 
 	}
 
@@ -74,16 +90,23 @@ public class CombatPlayer {
 	}
 
 	public void removePlayer(Player player) {
+
+		Bukkit.getScheduler().cancelTask(task.get(player.getUniqueId()));
+
+		if (combatLogged.containsKey(player.getUniqueId())) {
+			combatLogged.remove(player.getUniqueId());
+		}
+
 		if (players.contains(player.getUniqueId())) {
 			players.remove(player.getUniqueId());
 		}
+
 	}
 
 	public Player getPlayer(Player player) {
 		if (players.contains(player.getUniqueId())) {
 			return player;
 		}
-
 		return null;
 	}
 
