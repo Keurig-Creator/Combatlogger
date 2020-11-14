@@ -6,3 +6,11 @@ combat-message: '&cYou are now in combat!'
 
 #The message for going out of combat
 combat-off-message: '&cYou are now out of combat!'
+
+#The punishment when a user logs out during combat
+#Types: 'KILL', 'BAN:TimeInSeconds:REASON'
+#Variable {timeRemaining} is how long til the ban runs out
+#EXAMPLE
+punishment:
+  - "BAN:10:&cYou logged out during combat \n Please wait {timeRemaining}s"
+  - "KILL"
