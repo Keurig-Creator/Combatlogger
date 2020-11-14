@@ -2,7 +2,7 @@
 combat-timer: 10
 
 #The message for going in to combat
-combat-message: '&5You are now on cooldown!'
+combat-message: '&5You are now on combat!'
 
 #The message for going out of combat
 combat-off-message: '&dYou are out of combat!'
