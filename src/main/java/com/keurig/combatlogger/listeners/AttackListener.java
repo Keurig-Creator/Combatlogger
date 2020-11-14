@@ -18,7 +18,8 @@ public class AttackListener implements Listener {
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onHit(EntityDamageByEntityEvent e) {
 		if (e.getDamager() instanceof Player) {
-			main.getCombatPlayer().addCombat((Player) e.getDamager(), (Player) e.getEntity());
+			final Player player = (Player) e.getDamager();
+			main.getCombatPlayer().addCombat(player, (Player) e.getEntity());
 		}
 	}
 }

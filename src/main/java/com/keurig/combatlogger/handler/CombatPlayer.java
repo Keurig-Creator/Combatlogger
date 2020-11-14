@@ -37,43 +37,50 @@ public class CombatPlayer {
 		if (combatLogged.containsKey(player.getUniqueId()) && combatLogged.get(player.getUniqueId()) > System.currentTimeMillis()) {
 			Bukkit.getScheduler().cancelTask(task.get(player.getUniqueId()));
 		} else {
-			player.sendMessage(ChatColor.translateAlternateColorCodes('&', inCombat));
+			if (!player.hasPermission("combatlogger.admin"))
+				player.sendMessage(ChatColor.translateAlternateColorCodes('&', inCombat));
 		}
 
 		if (combatLogged.containsKey(target.getUniqueId()) && combatLogged.get(target.getUniqueId()) > System.currentTimeMillis()) {
 			Bukkit.getScheduler().cancelTask(task.get(target.getUniqueId()));
 		} else {
-			target.sendMessage(ChatColor.translateAlternateColorCodes('&', inCombat));
+			if (!target.hasPermission("combatlogger.admin"))
+				target.sendMessage(ChatColor.translateAlternateColorCodes('&', inCombat));
 		}
 
 		// Get combat timer
 		final int combatTimer = main.getConfig().getInt("combat-timer");
 
-		// Add attacker and target to combatLogged
-		combatLogged.put(player.getUniqueId(), System.currentTimeMillis() + (combatTimer * 1000));
-		combatLogged.put(target.getUniqueId(), System.currentTimeMillis() + (combatTimer * 1000));
-
 		// Get combat off message
 		final String outOfCombat = main.getConfig().getString("combat-off-message");
 		assert outOfCombat != null;
 
-		task.put(player.getUniqueId(), Bukkit.getScheduler().runTaskLater(main, new Runnable() {
-			public void run() {
-				if (combatLogged.containsKey(player.getUniqueId())) {
-					combatLogged.remove(player.getUniqueId());
-					player.sendMessage(ChatColor.translateAlternateColorCodes('&', outOfCombat));
-				}
-			}
-		}, 20 * combatTimer).getTaskId());
 
-		task.put(target.getUniqueId(), Bukkit.getScheduler().runTaskLater(main, new Runnable() {
-			public void run() {
-				if (combatLogged.containsKey(target.getUniqueId())) {
-					combatLogged.remove(target.getUniqueId());
-					target.sendMessage(ChatColor.translateAlternateColorCodes('&', outOfCombat));
+		// Add attacker and target to combatLogged
+		if (!player.hasPermission("combatlogger.admin")) {
+			combatLogged.put(player.getUniqueId(), System.currentTimeMillis() + (combatTimer * 1000));
+
+			task.put(player.getUniqueId(), Bukkit.getScheduler().runTaskLater(main, new Runnable() {
+				public void run() {
+					if (combatLogged.containsKey(player.getUniqueId())) {
+						combatLogged.remove(player.getUniqueId());
+						player.sendMessage(ChatColor.translateAlternateColorCodes('&', outOfCombat));
+					}
 				}
-			}
-		}, 20 * combatTimer).getTaskId());
+			}, 20 * combatTimer).getTaskId());
+		}
+		if (!target.hasPermission("combatlogger.admin")) {
+			combatLogged.put(target.getUniqueId(), System.currentTimeMillis() + (combatTimer * 1000));
+
+			task.put(target.getUniqueId(), Bukkit.getScheduler().runTaskLater(main, new Runnable() {
+				public void run() {
+					if (combatLogged.containsKey(target.getUniqueId())) {
+						combatLogged.remove(target.getUniqueId());
+						target.sendMessage(ChatColor.translateAlternateColorCodes('&', outOfCombat));
+					}
+				}
+			}, 20 * combatTimer).getTaskId());
+		}
 
 	}
 
