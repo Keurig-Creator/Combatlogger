@@ -11,9 +11,9 @@ public class CombatPlayer {
 
 	private final CombatLogger main;
 
-	private Map<UUID, Long> combatLogged;
+	private final Map<UUID, Long> combatLogged;
 
-	private List<Player> players;
+	private final Set<UUID> players;
 
 	private int task;
 
@@ -21,7 +21,7 @@ public class CombatPlayer {
 		this.main = main;
 
 		combatLogged = new HashMap<UUID, Long>();
-		players = new ArrayList<Player>();
+		players = new HashSet<UUID>();
 
 		addOnlinePlayers();
 	}
@@ -63,31 +63,31 @@ public class CombatPlayer {
 
 	public void addOnlinePlayers() {
 		for (Player player : Bukkit.getOnlinePlayers()) {
-			if (!players.contains(player))
-				players.add(player);
+			if (!players.contains(player.getUniqueId()))
+				players.add(player.getUniqueId());
 		}
 	}
 
 	public void addPlayer(Player player) {
-		if (!players.contains(player))
-			players.add(player);
+		if (!players.contains(player.getUniqueId()))
+			players.add(player.getUniqueId());
 	}
 
 	public void removePlayer(Player player) {
-		if (players.contains(player)) {
-			players.remove(player);
+		if (players.contains(player.getUniqueId())) {
+			players.remove(player.getUniqueId());
 		}
 	}
 
 	public Player getPlayer(Player player) {
-		if (players.contains(player)) {
+		if (players.contains(player.getUniqueId())) {
 			return player;
 		}
 
 		return null;
 	}
 
-	public List<Player> getPlayers() {
+	public Set<UUID> getPlayers() {
 		return players;
 	}
 
