@@ -1,8 +1,8 @@
-#Allows you to change the how many seconds the combat wears off at
+#Change how many seconds it takes for you to get out of combat
 combat-timer: 10
 
-#The message for going in to combat
-combat-message: '&5You are now on combat!'
+#The message for going into combat
+combat-message: '&cYou are now in combat!'
 
 #The message for going out of combat
-combat-off-message: '&dYou are out of combat!'
+combat-off-message: '&cYou are now out of combat!'
