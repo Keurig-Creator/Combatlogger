@@ -1,5 +1,5 @@
 name: CombatLogger
-version: 1.0.2
+version: 1.0.3
 main: com.keurig.combatlogger.CombatLogger
 authors: [Keurig]
 description: A simple combat logger plugin!
