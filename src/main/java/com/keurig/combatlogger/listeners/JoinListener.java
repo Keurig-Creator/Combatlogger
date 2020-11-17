@@ -34,8 +34,7 @@ public class JoinListener implements Listener {
 		if (banned.containsKey(e.getUniqueId()) && banned.get(e.getUniqueId()) > System.currentTimeMillis()) {
 
 			final List<String> punishment1 = main.getConfig().getStringList("punishment");
-
-
+			
 			for (int i = 0; i < punishment1.size(); i++) {
 
 				if (punishment1.get(i).contains("BAN:")) {
@@ -50,7 +49,6 @@ public class JoinListener implements Listener {
 			}
 		}
 	}
-
 
 	@EventHandler
 	public void onQuit(PlayerQuitEvent e) {

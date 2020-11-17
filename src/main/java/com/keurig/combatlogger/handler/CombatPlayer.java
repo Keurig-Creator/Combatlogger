@@ -55,7 +55,6 @@ public class CombatPlayer {
 		final String outOfCombat = main.getConfig().getString("combat-off-message");
 		assert outOfCombat != null;
 
-
 		// Add attacker and target to combatLogged
 		if (!player.hasPermission("combatlogger.admin")) {
 			combatLogged.put(player.getUniqueId(), System.currentTimeMillis() + (combatTimer * 1000));
