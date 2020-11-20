@@ -1,6 +1,8 @@
 package com.keurig.combatlogger.listeners;
 
 import com.keurig.combatlogger.CombatLogger;
+import com.keurig.combatlogger.PunishmentTypes;
+import com.keurig.combatlogger.handler.CombatPlayer;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -34,7 +36,7 @@ public class JoinListener implements Listener {
 		if (banned.containsKey(e.getUniqueId()) && banned.get(e.getUniqueId()) > System.currentTimeMillis()) {
 
 			final List<String> punishment1 = main.getConfig().getStringList("punishment");
-			
+
 			for (int i = 0; i < punishment1.size(); i++) {
 
 				if (punishment1.get(i).contains("BAN:")) {
@@ -52,28 +54,33 @@ public class JoinListener implements Listener {
 
 	@EventHandler
 	public void onQuit(PlayerQuitEvent e) {
+		final CombatPlayer combatPlayer = main.getCombatPlayer();
+
 		Player player = e.getPlayer();
 
 		final List<String> punishment1 = main.getConfig().getStringList("punishment");
 
-
 		if (e.getPlayer().hasPermission("combatlogger.admin"))
 			return;
 
-		if (main.getCombatPlayer().getCombatLogged().containsKey(player.getUniqueId()) && main.getCombatPlayer().getCombatLogged().get(player.getUniqueId()) > System.currentTimeMillis()) {
+		if (combatPlayer.getCombatLogged().containsKey(player.getUniqueId()) && combatPlayer.getCombatLogged().get(player.getUniqueId()) > System.currentTimeMillis()) {
 			for (int i = 0; i < punishment1.size(); i++) {
 
-				if (punishment1.get(i).contains("KILL")) {
-					player.setHealth(0);
+				if (punishment1.get(i).contains(":")) {
+					final String[] args = punishment1.get(i).split(":");
+
+					if (PunishmentTypes.valueOf(args[0]) == PunishmentTypes.BAN) {
+						banned.put(player.getUniqueId(), System.currentTimeMillis() + Long.parseLong(args[1]) * 1000);
+					}
+				} else {
+					if (PunishmentTypes.valueOf(punishment1.get(i)) == PunishmentTypes.KILL) {
+						player.setHealth(0);
+					}
 				}
-
-				if (punishment1.get(i).contains("BAN:")) {
-					String[] banArgs = punishment1.get(i).split(":");
-
-					banned.put(player.getUniqueId(), System.currentTimeMillis() + Long.parseLong(banArgs[1]) * 1000);
-				}
-
+				
 			}
+
+			combatPlayer.removePlayer(player);
 		}
 	}
 }
