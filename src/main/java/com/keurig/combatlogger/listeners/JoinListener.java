@@ -39,15 +39,17 @@ public class JoinListener implements Listener {
 
 			for (int i = 0; i < punishment1.size(); i++) {
 
-				if (punishment1.get(i).contains("BAN:")) {
+				if (punishment1.get(i).contains(":")) {
+					final String[] args = punishment1.get(i).split(":");
 
-					String[] banArgs = punishment1.get(i).split(":");
+					if (PunishmentTypes.valueOf(args[0]) == PunishmentTypes.BAN) {
+						final int timeRemaining = (int) ((banned.get(e.getUniqueId()) - System.currentTimeMillis()) / 1000);
 
-					final int timeRemaining = (int) ((banned.get(e.getUniqueId()) - System.currentTimeMillis()) / 1000);
-
-					e.disallow(AsyncPlayerPreLoginEvent.Result.KICK_BANNED, ChatColor.translateAlternateColorCodes('&', banArgs[2]).replace("{timeRemaining}",
-							String.valueOf(timeRemaining)));
+						e.disallow(AsyncPlayerPreLoginEvent.Result.KICK_BANNED, ChatColor.translateAlternateColorCodes('&', args[2]).replace("{timeRemaining}",
+								String.valueOf(timeRemaining)));
+					}
 				}
+				
 			}
 		}
 	}
@@ -77,7 +79,7 @@ public class JoinListener implements Listener {
 						player.setHealth(0);
 					}
 				}
-				
+
 			}
 
 			combatPlayer.removePlayer(player);
