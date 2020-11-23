@@ -3,6 +3,7 @@ package com.keurig.combatlogger.listeners;
 import com.keurig.combatlogger.CombatLogger;
 import com.keurig.combatlogger.PunishmentTypes;
 import com.keurig.combatlogger.handler.CombatPlayer;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -16,15 +17,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+@RequiredArgsConstructor
 public class JoinListener implements Listener {
 
 	private final CombatLogger main;
 
-	private final Map<UUID, Long> banned = new HashMap<UUID, Long>();
-
-	public JoinListener(CombatLogger main) {
-		this.main = main;
-	}
+	private Map<UUID, Long> banned = new HashMap<UUID, Long>();
 
 	@EventHandler
 	public void onJoin(PlayerJoinEvent e) {
