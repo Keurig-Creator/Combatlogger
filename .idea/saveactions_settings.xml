@@ -7,6 +7,7 @@
         <option value="organizeImports" />
         <option value="reformat" />
         <option value="reload" />
+        <option value="unqualifiedFieldAccess" />
         <option value="missingOverrideAnnotation" />
         <option value="finalPrivateMethod" />
         <option value="explicitTypeCanBeDiamond" />
