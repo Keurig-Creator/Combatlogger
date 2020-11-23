@@ -20,7 +20,7 @@ public class JoinListener implements Listener {
 
 	private final CombatLogger main;
 
-	private Map<UUID, Long> banned = new HashMap<UUID, Long>();
+	private final Map<UUID, Long> banned = new HashMap<UUID, Long>();
 
 	public JoinListener(CombatLogger main) {
 		this.main = main;
@@ -28,14 +28,15 @@ public class JoinListener implements Listener {
 
 	@EventHandler
 	public void onJoin(PlayerJoinEvent e) {
-		main.getCombatPlayer().addPlayer(e.getPlayer());
+		this.main.getCombatPlayer().addPlayer(e.getPlayer());
 	}
 
 	@EventHandler
 	public void onPreJoin(AsyncPlayerPreLoginEvent e) {
-		if (banned.containsKey(e.getUniqueId()) && banned.get(e.getUniqueId()) > System.currentTimeMillis()) {
 
-			final List<String> punishment1 = main.getConfig().getStringList("punishment");
+		if (this.banned.containsKey(e.getUniqueId()) && this.banned.get(e.getUniqueId()) > System.currentTimeMillis()) {
+
+			final List<String> punishment1 = this.main.getConfig().getStringList("punishment");
 
 			for (int i = 0; i < punishment1.size(); i++) {
 
@@ -43,24 +44,24 @@ public class JoinListener implements Listener {
 					final String[] args = punishment1.get(i).split(":");
 
 					if (PunishmentTypes.valueOf(args[0]) == PunishmentTypes.BAN) {
-						final int timeRemaining = (int) ((banned.get(e.getUniqueId()) - System.currentTimeMillis()) / 1000);
+						final int timeRemaining = (int) ((this.banned.get(e.getUniqueId()) - System.currentTimeMillis()) / 1000);
 
 						e.disallow(AsyncPlayerPreLoginEvent.Result.KICK_BANNED, ChatColor.translateAlternateColorCodes('&', args[2]).replace("{timeRemaining}",
 								String.valueOf(timeRemaining)));
 					}
 				}
-				
+
 			}
 		}
 	}
 
 	@EventHandler
 	public void onQuit(PlayerQuitEvent e) {
-		final CombatPlayer combatPlayer = main.getCombatPlayer();
+		final CombatPlayer combatPlayer = this.main.getCombatPlayer();
 
 		Player player = e.getPlayer();
 
-		final List<String> punishment1 = main.getConfig().getStringList("punishment");
+		final List<String> punishment1 = this.main.getConfig().getStringList("punishment");
 
 		if (e.getPlayer().hasPermission("combatlogger.admin"))
 			return;
@@ -72,7 +73,7 @@ public class JoinListener implements Listener {
 					final String[] args = punishment1.get(i).split(":");
 
 					if (PunishmentTypes.valueOf(args[0]) == PunishmentTypes.BAN) {
-						banned.put(player.getUniqueId(), System.currentTimeMillis() + Long.parseLong(args[1]) * 1000);
+						this.banned.put(player.getUniqueId(), System.currentTimeMillis() + Long.parseLong(args[1]) * 1000);
 					}
 				} else {
 					if (PunishmentTypes.valueOf(punishment1.get(i)) == PunishmentTypes.KILL) {
@@ -85,4 +86,10 @@ public class JoinListener implements Listener {
 			combatPlayer.removePlayer(player);
 		}
 	}
+
+//	public String getPunishment() {
+//		final List<String> punishment1 = main.getConfig().getStringList("punishment");
+//
+//	}
+
 }
