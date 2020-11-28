@@ -20,9 +20,9 @@ public class CombatPlayer {
 	public CombatPlayer(CombatLogger main) {
 		this.main = main;
 
-		this.combatLogged = new HashMap<UUID, Long>();
-		this.task = new HashMap<UUID, Integer>();
-		this.players = new HashSet<UUID>();
+		this.combatLogged = new HashMap<>();
+		this.task = new HashMap<>();
+		this.players = new HashSet<>();
 
 		addOnlinePlayers();
 	}
@@ -59,6 +59,7 @@ public class CombatPlayer {
 			this.combatLogged.put(player.getUniqueId(), System.currentTimeMillis() + (combatTimer * 1000));
 
 			this.task.put(player.getUniqueId(), Bukkit.getScheduler().runTaskLater(this.main, new Runnable() {
+				@Override
 				public void run() {
 					if (CombatPlayer.this.combatLogged.containsKey(player.getUniqueId())) {
 						CombatPlayer.this.combatLogged.remove(player.getUniqueId());
@@ -71,6 +72,7 @@ public class CombatPlayer {
 			this.combatLogged.put(target.getUniqueId(), System.currentTimeMillis() + (combatTimer * 1000));
 
 			this.task.put(target.getUniqueId(), Bukkit.getScheduler().runTaskLater(this.main, new Runnable() {
+				@Override
 				public void run() {
 					if (CombatPlayer.this.combatLogged.containsKey(target.getUniqueId())) {
 						CombatPlayer.this.combatLogged.remove(target.getUniqueId());
@@ -98,13 +100,15 @@ public class CombatPlayer {
 
 		Bukkit.getScheduler().cancelTask(this.task.get(player.getUniqueId()));
 
-		if (this.combatLogged.containsKey(player.getUniqueId())) {
-			this.combatLogged.remove(player.getUniqueId());
-		}
+		this.combatLogged.remove(player.getUniqueId());
 
-		if (this.players.contains(player.getUniqueId())) {
-			this.players.remove(player.getUniqueId());
-		}
+		this.players.remove(player.getUniqueId());
+	}
 
+	public boolean isTagged(Player player) {
+		if (this.players.contains(player.getUniqueId()))
+			return true;
+		else
+			return false;
 	}
 }
