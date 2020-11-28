@@ -106,9 +106,6 @@ public class CombatPlayer {
 	}
 
 	public boolean isTagged(Player player) {
-		if (this.players.contains(player.getUniqueId()))
-			return true;
-		else
-			return false;
+		return this.combatLogged.containsKey(player.getUniqueId());
 	}
 }

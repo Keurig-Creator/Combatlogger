@@ -6,6 +6,7 @@ import com.keurig.combatlogger.listeners.DeathListener;
 import com.keurig.combatlogger.listeners.JoinListener;
 import lombok.Getter;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 @Getter
@@ -27,5 +28,9 @@ public class CombatLogger extends JavaPlugin {
 		Bukkit.getPluginManager().registerEvents(new AttackListener(this), this);
 		Bukkit.getPluginManager().registerEvents(new JoinListener(this), this);
 		Bukkit.getPluginManager().registerEvents(new DeathListener(this), this);
+	}
+
+	public boolean isTagged(Player player) {
+		return this.combatPlayer.isTagged(player);
 	}
 }
