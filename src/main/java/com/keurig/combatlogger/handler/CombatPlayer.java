@@ -58,26 +58,20 @@ public class CombatPlayer {
 		if (!player.hasPermission("combatlogger.admin")) {
 			this.combatLogged.put(player.getUniqueId(), System.currentTimeMillis() + (combatTimer * 1000));
 
-			this.task.put(player.getUniqueId(), Bukkit.getScheduler().runTaskLater(this.main, new Runnable() {
-				@Override
-				public void run() {
-					if (CombatPlayer.this.combatLogged.containsKey(player.getUniqueId())) {
-						CombatPlayer.this.combatLogged.remove(player.getUniqueId());
-						player.sendMessage(ChatColor.translateAlternateColorCodes('&', outOfCombat));
-					}
+			this.task.put(player.getUniqueId(), Bukkit.getScheduler().runTaskLater(this.main, () -> {
+				if (CombatPlayer.this.combatLogged.containsKey(player.getUniqueId())) {
+					CombatPlayer.this.combatLogged.remove(player.getUniqueId());
+					player.sendMessage(ChatColor.translateAlternateColorCodes('&', outOfCombat));
 				}
 			}, 20 * combatTimer).getTaskId());
 		}
 		if (!target.hasPermission("combatlogger.admin")) {
 			this.combatLogged.put(target.getUniqueId(), System.currentTimeMillis() + (combatTimer * 1000));
 
-			this.task.put(target.getUniqueId(), Bukkit.getScheduler().runTaskLater(this.main, new Runnable() {
-				@Override
-				public void run() {
-					if (CombatPlayer.this.combatLogged.containsKey(target.getUniqueId())) {
-						CombatPlayer.this.combatLogged.remove(target.getUniqueId());
-						target.sendMessage(ChatColor.translateAlternateColorCodes('&', outOfCombat));
-					}
+			this.task.put(target.getUniqueId(), Bukkit.getScheduler().runTaskLater(this.main, () -> {
+				if (CombatPlayer.this.combatLogged.containsKey(target.getUniqueId())) {
+					CombatPlayer.this.combatLogged.remove(target.getUniqueId());
+					target.sendMessage(ChatColor.translateAlternateColorCodes('&', outOfCombat));
 				}
 			}, 20 * combatTimer).getTaskId());
 		}
@@ -86,14 +80,12 @@ public class CombatPlayer {
 
 	public void addOnlinePlayers() {
 		for (Player player : Bukkit.getOnlinePlayers()) {
-			if (!this.players.contains(player.getUniqueId()))
-				this.players.add(player.getUniqueId());
+			this.players.add(player.getUniqueId());
 		}
 	}
 
 	public void addPlayer(Player player) {
-		if (!this.players.contains(player.getUniqueId()))
-			this.players.add(player.getUniqueId());
+		this.players.add(player.getUniqueId());
 	}
 
 	public void removePlayer(Player player) {
