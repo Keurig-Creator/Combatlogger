@@ -1,7 +1,9 @@
 com\keurig\combatlogger\CombatLogger.class
 com\keurig\combatlogger\PunishmentTypes.class
 com\keurig\combatlogger\listeners\AttackListener.class
+com\keurig\combatlogger\listeners\DeathListener.class
 com\keurig\combatlogger\handler\CombatPlayer$1.class
+com\keurig\combatlogger\api\CombatLoggerAPI.class
 com\keurig\combatlogger\handler\CombatPlayer$2.class
 com\keurig\combatlogger\handler\CombatPlayer.class
 com\keurig\combatlogger\listeners\JoinListener.class
