@@ -20,6 +20,7 @@ public class CombatLogger extends JavaPlugin {
 	@Override
 	public void onEnable() {
 
+		instance = this;
 		this.combatPlayer = new CombatPlayer(this);
 
 		getConfig().options().copyDefaults();
