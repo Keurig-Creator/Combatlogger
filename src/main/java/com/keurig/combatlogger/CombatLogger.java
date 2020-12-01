@@ -12,6 +12,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class CombatLogger extends JavaPlugin {
 
+	/**
+	 * Get the instance of the CombatLogger.
+	 */
 	@Getter
 	private static CombatLogger instance;
 
@@ -21,11 +24,17 @@ public class CombatLogger extends JavaPlugin {
 	@Getter
 	private PunishmentManager punishmentManager;
 
+	@Getter
+	private String nsmVersion;
+
 	@Override
 	public void onEnable() {
 		instance = this;
 		this.combatPlayer = new CombatPlayer(this);
 		this.punishmentManager = new PunishmentManager();
+
+		this.nsmVersion = Bukkit.getServer().getClass().getPackage().getName();
+		this.nsmVersion = this.nsmVersion.substring(this.nsmVersion.lastIndexOf(".") + 1);
 
 		registerEvents();
 		registerConfig();
@@ -48,7 +57,7 @@ public class CombatLogger extends JavaPlugin {
 	}
 
 	/**
-	 * @param player get the player tagged check
+	 * @param player get the player tagged check.
 	 * @return true if user is tagged else false
 	 * @deprecated moved api to API.isTagged(Player)
 	 */
