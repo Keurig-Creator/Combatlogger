@@ -31,9 +31,12 @@ public class BanPunishment extends Punishment {
 
 	@Override
 	public void onQuit(String label, String[] args) {
-		this.args = args;
-
 		final Player player = getPlayer();
+
+		if (player.hasPermission("combatlogger.admin"))
+			return;
+
+		this.args = args;
 		this.banned.put(player.getUniqueId(), System.currentTimeMillis() + (Integer.parseInt(args[0]) * 1000));
 	}
 }

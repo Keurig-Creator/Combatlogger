@@ -50,6 +50,9 @@ public class CombatPlayer {
 	}
 
 	public void addCombat(Player player) {
+		if (player.hasPermission("combatlogger.admin"))
+			return;
+
 		final int combatTimer = this.plugin.getConfig().getInt("combat-timer");
 
 		final boolean useChat = this.plugin.getConfig().getBoolean("chat.use");
@@ -107,63 +110,5 @@ public class CombatPlayer {
 
 	private long combatTimeRemaining(Player player) {
 		return this.combatLogged.get(player.getUniqueId()) - System.currentTimeMillis();
-	}
-
-	/**
-	 * Add user to combat
-	 *
-	 * @param player the player that hit the target.
-	 * @param target the target the player is in combat with
-	 * @deprecated redoing combat system
-	 */
-	public void addCombat(final Player player, final Player target) {
-
-		// Get combat message
-		final String inCombat = this.plugin.getConfig().getString("combat-message");
-		assert inCombat != null;
-
-		if (this.combatLogged.containsKey(player.getUniqueId()) && this.combatLogged.get(player.getUniqueId()) > System.currentTimeMillis()) {
-			Bukkit.getScheduler().cancelTask(this.taskCombat.get(player.getUniqueId()));
-		} else {
-			if (!player.hasPermission("combatlogger.admin"))
-				player.sendMessage(ChatColor.translateAlternateColorCodes('&', inCombat));
-		}
-
-		if (this.combatLogged.containsKey(target.getUniqueId()) && this.combatLogged.get(target.getUniqueId()) > System.currentTimeMillis()) {
-			Bukkit.getScheduler().cancelTask(this.taskCombat.get(target.getUniqueId()));
-		} else {
-			if (!target.hasPermission("combatlogger.admin"))
-				target.sendMessage(ChatColor.translateAlternateColorCodes('&', inCombat));
-		}
-
-		// Get combat timer
-		final int combatTimer = this.plugin.getConfig().getInt("combat-timer");
-
-		// Get combat off message
-		final String outOfCombat = this.plugin.getConfig().getString("combat-off-message");
-		assert outOfCombat != null;
-
-		// Add attacker and target to combatLogged
-		if (!player.hasPermission("combatlogger.admin")) {
-			this.combatLogged.put(player.getUniqueId(), System.currentTimeMillis() + (combatTimer * 1000));
-
-			this.taskCombat.put(player.getUniqueId(), Bukkit.getScheduler().runTaskLater(this.plugin, () -> {
-				if (CombatPlayer.this.combatLogged.containsKey(player.getUniqueId())) {
-					CombatPlayer.this.combatLogged.remove(player.getUniqueId());
-					player.sendMessage(ChatColor.translateAlternateColorCodes('&', outOfCombat));
-				}
-			}, 20 * combatTimer).getTaskId());
-		}
-		if (!target.hasPermission("combatlogger.admin")) {
-			this.combatLogged.put(target.getUniqueId(), System.currentTimeMillis() + (combatTimer * 1000));
-
-			this.taskCombat.put(target.getUniqueId(), Bukkit.getScheduler().runTaskLater(this.plugin, () -> {
-				if (CombatPlayer.this.combatLogged.containsKey(target.getUniqueId())) {
-					CombatPlayer.this.combatLogged.remove(target.getUniqueId());
-					target.sendMessage(ChatColor.translateAlternateColorCodes('&', outOfCombat));
-				}
-			}, 20 * combatTimer).getTaskId());
-		}
-
 	}
 }

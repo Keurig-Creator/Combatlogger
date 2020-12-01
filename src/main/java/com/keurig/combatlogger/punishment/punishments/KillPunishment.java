@@ -12,6 +12,10 @@ public class KillPunishment extends Punishment {
 	@Override
 	public void onQuit(String label, String[] args) {
 		final Player player = getPlayer();
+
+		if (player.hasPermission("combatlogger.admin"))
+			return;
+		
 		player.setHealth(0);
 	}
 }
