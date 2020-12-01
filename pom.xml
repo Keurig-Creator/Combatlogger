@@ -19,6 +19,10 @@
             </plugin>
         </plugins>
     </build>
+    <properties>
+        <spigotpath>C:/SpigotVersions/spigot-1.16.4.jar</spigotpath>
+    </properties>
+
 
     <repositories>
         <repository>
@@ -39,7 +43,7 @@
             <artifactId>spigot-api</artifactId>
             <version>1.16.4-R0.1-SNAPSHOT</version>
             <scope>system</scope>
-            <systemPath>C:/SpigotVersions/spigot-1.16.4.jar</systemPath>
+            <systemPath>${spigotpath}</systemPath>
         </dependency>
     </dependencies>
 </project>
