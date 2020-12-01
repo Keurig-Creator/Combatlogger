@@ -15,7 +15,10 @@ public class AttackListener implements Listener {
 	public void onHit(EntityDamageByEntityEvent event) {
 		if (event.getDamager() instanceof Player && event.getEntity() instanceof Player) {
 			final Player player = (Player) event.getDamager();
-			this.plugin.getCombatPlayer().addCombat(player, (Player) event.getEntity());
+			final Player targer = (Player) event.getEntity();
+
+			this.plugin.getCombatPlayer().addCombat(player);
+			this.plugin.getCombatPlayer().addCombat(targer);
 		}
 	}
 }
