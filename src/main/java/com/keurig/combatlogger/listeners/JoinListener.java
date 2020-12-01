@@ -1,7 +1,7 @@
 package com.keurig.combatlogger.listeners;
 
 import com.keurig.combatlogger.CombatLogger;
-import com.keurig.combatlogger.api.API;
+import com.keurig.combatlogger.api.CombatLoggerAPI;
 import com.keurig.combatlogger.event.PlayerCombatQuitEvent;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
@@ -26,7 +26,7 @@ public class JoinListener implements Listener {
 	public void onQuit(PlayerQuitEvent event) {
 		Player player = event.getPlayer();
 
-		if (API.isTagged(player)) {
+		if (CombatLoggerAPI.isTagged(player)) {
 			PlayerCombatQuitEvent bukkitEvent = new PlayerCombatQuitEvent(player);
 			Bukkit.getPluginManager().callEvent(bukkitEvent);
 		}
