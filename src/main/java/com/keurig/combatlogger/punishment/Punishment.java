@@ -34,7 +34,7 @@ public abstract class Punishment implements Listener {
 	}
 
 	/**
-	 * Run whenced the place quits the server during combat
+	 * Runs when the player quits the server duringW combat.
 	 *
 	 * @param label the name of the punishment
 	 * @param args  the arguments used
