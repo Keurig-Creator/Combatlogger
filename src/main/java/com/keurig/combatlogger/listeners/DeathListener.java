@@ -12,11 +12,7 @@ import java.util.Objects;
 
 public class DeathListener implements Listener {
 
-	private final CombatLogger plugin;
-
-	public DeathListener(CombatLogger plugin) {
-		this.plugin = plugin;
-	}
+	private final CombatLogger plugin = CombatLogger.getInstance();
 
 	@EventHandler
 	public void onDeath(PlayerDeathEvent event) {

@@ -9,11 +9,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 public class AttackListener implements Listener {
 
-	private final CombatLogger plugin;
-
-	public AttackListener(CombatLogger main) {
-		this.plugin = main;
-	}
+	private final CombatLogger plugin = CombatLogger.getInstance();
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onHit(EntityDamageByEntityEvent event) {
