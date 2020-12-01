@@ -8,6 +8,9 @@ import org.bukkit.event.HandlerList;
 @Getter
 public class PlayerCombatQuitEvent extends Event {
 
+	/**
+	 * Get the player who left during combat
+	 */
 	private final Player player;
 
 	private static final HandlerList HANDLERS = new HandlerList();
