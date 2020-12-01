@@ -6,7 +6,7 @@
 
     <groupId>com.keurig.combatlogger.CombatLogger</groupId>
     <artifactId>CombatLogger</artifactId>
-    <version>1.0.7</version>
+    <version>1.1.0</version>
     <build>
         <plugins>
             <plugin>
@@ -38,7 +38,8 @@
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
             <version>1.16.4-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
+            <scope>system</scope>
+            <systemPath>C:/SpigotVersions/spigot-1.16.4.jar</systemPath>
         </dependency>
     </dependencies>
 </project>

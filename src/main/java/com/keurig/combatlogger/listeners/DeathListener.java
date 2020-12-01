@@ -8,15 +8,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
-import java.util.Objects;
-
 public class DeathListener implements Listener {
 
-	private final CombatLogger plugin;
-
-	public DeathListener(CombatLogger plugin) {
-		this.plugin = plugin;
-	}
+	private final CombatLogger plugin = CombatLogger.getInstance();
 
 	@EventHandler
 	public void onDeath(PlayerDeathEvent event) {
@@ -24,8 +18,11 @@ public class DeathListener implements Listener {
 
 		final CombatPlayer combatPlayer = this.plugin.getCombatPlayer();
 		combatPlayer.removePlayer(player);
+		
+		final String combatOffChat = this.plugin.getConfig().getString("chat.off-message");
 
-		player.sendMessage(ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(this.plugin.getConfig().getString("combat-off-message"))));
+		assert combatOffChat != null;
+		player.sendMessage(ChatColor.translateAlternateColorCodes('&', combatOffChat));
 	}
 
 }
