@@ -25,7 +25,7 @@ public class API {
 	 * @param player get the player of time left
 	 * @return the time left of players combat
 	 */
-	public static long combatTimeRemaining(Player player) {
+	public static long timeRemaining(Player player) {
 		final Map<UUID, Long> combatLogged = CombatLogger.getInstance().getCombatPlayer().getCombatLogged();
 		return isTagged(player) ? combatLogged.get(player.getUniqueId()) - System.currentTimeMillis() : 0;
 	}
