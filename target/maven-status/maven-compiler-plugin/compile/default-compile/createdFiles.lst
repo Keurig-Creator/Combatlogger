@@ -1,6 +1,5 @@
 com\keurig\combatlogger\punishment\punishments\BanPunishment.class
 com\keurig\combatlogger\listeners\AttackListener.class
-com\keurig\combatlogger\types\PunishmentTypes.class
 com\keurig\combatlogger\listeners\DeathListener.class
 com\keurig\combatlogger\listeners\JoinListener.class
 com\keurig\combatlogger\CombatLogger.class
@@ -10,3 +9,4 @@ com\keurig\combatlogger\api\API.class
 com\keurig\combatlogger\punishment\Punishment.class
 com\keurig\combatlogger\punishment\PunishmentManager.class
 com\keurig\combatlogger\handler\CombatPlayer.class
+com\keurig\combatlogger\actionbar\ActionBar.class
