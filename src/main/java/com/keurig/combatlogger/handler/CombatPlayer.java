@@ -11,14 +11,14 @@ import java.util.*;
 @Getter
 public class CombatPlayer {
 
-	private final CombatLogger main;
+	private final CombatLogger plugin;
 
 	private final Map<UUID, Long> combatLogged;
 	private final Set<UUID> players;
 	private final Map<UUID, Integer> task;
 
-	public CombatPlayer(CombatLogger main) {
-		this.main = main;
+	public CombatPlayer(CombatLogger plugin) {
+		this.plugin = plugin;
 
 		this.combatLogged = new HashMap<>();
 		this.task = new HashMap<>();
@@ -30,7 +30,7 @@ public class CombatPlayer {
 	public void addCombat(final Player player, final Player target) {
 
 		// Get combat message
-		final String inCombat = this.main.getConfig().getString("combat-message");
+		final String inCombat = this.plugin.getConfig().getString("combat-message");
 		assert inCombat != null;
 
 		if (this.combatLogged.containsKey(player.getUniqueId()) && this.combatLogged.get(player.getUniqueId()) > System.currentTimeMillis()) {
@@ -48,17 +48,17 @@ public class CombatPlayer {
 		}
 
 		// Get combat timer
-		final int combatTimer = this.main.getConfig().getInt("combat-timer");
+		final int combatTimer = this.plugin.getConfig().getInt("combat-timer");
 
 		// Get combat off message
-		final String outOfCombat = this.main.getConfig().getString("combat-off-message");
+		final String outOfCombat = this.plugin.getConfig().getString("combat-off-message");
 		assert outOfCombat != null;
 
 		// Add attacker and target to combatLogged
 		if (!player.hasPermission("combatlogger.admin")) {
 			this.combatLogged.put(player.getUniqueId(), System.currentTimeMillis() + (combatTimer * 1000));
 
-			this.task.put(player.getUniqueId(), Bukkit.getScheduler().runTaskLater(this.main, () -> {
+			this.task.put(player.getUniqueId(), Bukkit.getScheduler().runTaskLater(this.plugin, () -> {
 				if (CombatPlayer.this.combatLogged.containsKey(player.getUniqueId())) {
 					CombatPlayer.this.combatLogged.remove(player.getUniqueId());
 					player.sendMessage(ChatColor.translateAlternateColorCodes('&', outOfCombat));
@@ -68,7 +68,7 @@ public class CombatPlayer {
 		if (!target.hasPermission("combatlogger.admin")) {
 			this.combatLogged.put(target.getUniqueId(), System.currentTimeMillis() + (combatTimer * 1000));
 
-			this.task.put(target.getUniqueId(), Bukkit.getScheduler().runTaskLater(this.main, () -> {
+			this.task.put(target.getUniqueId(), Bukkit.getScheduler().runTaskLater(this.plugin, () -> {
 				if (CombatPlayer.this.combatLogged.containsKey(target.getUniqueId())) {
 					CombatPlayer.this.combatLogged.remove(target.getUniqueId());
 					target.sendMessage(ChatColor.translateAlternateColorCodes('&', outOfCombat));
@@ -90,14 +90,11 @@ public class CombatPlayer {
 
 	public void removePlayer(Player player) {
 
-		Bukkit.getScheduler().cancelTask(this.task.get(player.getUniqueId()));
+		if (this.task.get(player.getUniqueId()) != null)
+			Bukkit.getScheduler().cancelTask(this.task.get(player.getUniqueId()));
 
 		this.combatLogged.remove(player.getUniqueId());
 
 		this.players.remove(player.getUniqueId());
-	}
-
-	public boolean isTagged(Player player) {
-		return this.combatLogged.containsKey(player.getUniqueId());
 	}
 }
