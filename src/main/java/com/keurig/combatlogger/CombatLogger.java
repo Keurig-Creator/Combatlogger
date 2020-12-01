@@ -59,7 +59,7 @@ public class CombatLogger extends JavaPlugin {
 	/**
 	 * @param player get the player tagged check.
 	 * @return true if user is tagged else false
-	 * @deprecated moved api to API.isTagged(Player)
+	 * @deprecated moved api to CombatLoggerAPI.isTagged(Player)
 	 */
 	public boolean isTagged(Player player) {
 		return getCombatPlayer().getCombatLogged().containsKey(player.getUniqueId());
