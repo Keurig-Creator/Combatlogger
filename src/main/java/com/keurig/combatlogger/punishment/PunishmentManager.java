@@ -28,14 +28,7 @@ public class PunishmentManager {
 
 	private void initializeDefault() {
 		registerPunishment(new BanPunishment(), plugin);
-		registerPunishment(new KillPunishment(), plugin);
-	}
-
-	/**
-	 * Unregister all the punishments.
-	 */
-	public void unregisterPunishments() {
-		
+		registerPunishment(new KillPunishment());
 	}
 
 	/**
@@ -56,6 +49,13 @@ public class PunishmentManager {
 	public static void registerPunishment(Punishment punishment, Plugin plugin) {
 		Bukkit.getPluginManager().registerEvents(punishment, plugin);
 		punishments.add(punishment);
+	}
+
+	/**
+	 * Unregister all the punishments.
+	 */
+	public void unregisterPunishments() {
+		punishments.clear();
 	}
 
 	public void onQuit(Player player) {
