@@ -109,6 +109,9 @@ public class CombatPlayer {
 	}
 
 	private long combatTimeRemaining(Player player) {
-		return this.combatLogged.get(player.getUniqueId()) - System.currentTimeMillis();
+		if (this.combatLogged.containsKey(player.getUniqueId()))
+			return this.combatLogged.get(player.getUniqueId()) - System.currentTimeMillis();
+		
+		return 0;
 	}
 }
