@@ -2,11 +2,13 @@ package com.keurig.combatlogger.punishment;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 
 @Getter
 @Setter
+@ToString
 public abstract class Punishment implements Listener {
 
 	/**
@@ -40,11 +42,4 @@ public abstract class Punishment implements Listener {
 	 * @param args  the arguments used
 	 */
 	public abstract void onQuit(String label, String[] args);
-
-	@Override
-	public String toString() {
-		return "Punishment{" +
-				"name='" + this.name + '\'' +
-				'}';
-	}
 }

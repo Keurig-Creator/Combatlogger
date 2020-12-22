@@ -26,7 +26,7 @@ public class BanPunishment extends Punishment {
 	public void onPreJoin(PlayerPreLoginEvent event) {
 		if (this.banned.containsKey(event.getUniqueId()) && this.banned.get(event.getUniqueId()) > System.currentTimeMillis())
 			event.disallow(PlayerPreLoginEvent.Result.KICK_BANNED, ChatColor.translateAlternateColorCodes('&',
-					this.args[1].replace("{timeRemaining}", String.valueOf((this.banned.get(event.getUniqueId()) - System.currentTimeMillis()) / 1000))));
+					this.args[1].replace("{timeRemaining}", timeFormat(this.banned.get(event.getUniqueId()) - System.currentTimeMillis()))));
 	}
 
 	@Override
@@ -38,5 +38,18 @@ public class BanPunishment extends Punishment {
 
 		this.args = args;
 		this.banned.put(player.getUniqueId(), System.currentTimeMillis() + (Integer.parseInt(args[0]) * 1000));
+	}
+
+	private String timeFormat(long milis) {
+
+		long second = (milis / 1000) % 60;
+		long minute = (milis / (1000 * 60)) % 60;
+
+		if (minute > 0) {
+			return String.format("%dm %ds", minute, second);
+		} else if (second > 0) {
+			return String.format("%ds", second);
+		} else
+			return String.format("%dms", milis);
 	}
 }
