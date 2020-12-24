@@ -1,9 +1,10 @@
 name: CombatLogger
-version: 1.1.2
+version: 1.2.0
 main: com.keurig.combatlogger.CombatLogger
 authors: [Keurig]
 description: A simple combat logger plugin!
 api-version: 1.13
+softdepend: [Factions]
 permissions:
   combatlogger.admin:
     default: false
