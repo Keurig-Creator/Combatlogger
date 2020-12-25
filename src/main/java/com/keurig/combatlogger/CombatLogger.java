@@ -1,10 +1,12 @@
 package com.keurig.combatlogger;
 
 import com.keurig.combatlogger.handler.CombatPlayer;
-import com.keurig.combatlogger.listeners.AttackListener;
-import com.keurig.combatlogger.listeners.DeathListener;
-import com.keurig.combatlogger.listeners.JoinListener;
+import com.keurig.combatlogger.listeners.*;
 import com.keurig.combatlogger.punishment.PunishmentManager;
+import com.keurig.combatlogger.utils.Chat;
+import com.keurig.combatlogger.utils.factions.FactionsHook;
+import com.keurig.combatlogger.utils.factions.FactionsUUID;
+import com.keurig.combatlogger.utils.factions.FactionsX;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -25,7 +27,14 @@ public class CombatLogger extends JavaPlugin {
 	private PunishmentManager punishmentManager;
 
 	@Getter
+	private static FactionsHook factionsHook;
+
+	@Getter
 	private String nsmVersion;
+
+	@Getter
+	private boolean factionsEnabled;
+
 
 	@Override
 	public void onEnable() {
@@ -35,6 +44,22 @@ public class CombatLogger extends JavaPlugin {
 
 		this.nsmVersion = Bukkit.getServer().getClass().getPackage().getName();
 		this.nsmVersion = this.nsmVersion.substring(this.nsmVersion.lastIndexOf(".") + 1);
+
+		if (Bukkit.getPluginManager().isPluginEnabled("Factions")) {
+			factionsHook = new FactionsUUID();
+			Bukkit.getPluginManager().registerEvents(new CommandFlightListener(), this);
+
+			this.factionsEnabled = true;
+
+			Chat.log("&aEnabled FactionsUUID Support");
+		} else if (Bukkit.getPluginManager().isPluginEnabled("FactionsX")) {
+			factionsHook = new FactionsX();
+			Bukkit.getPluginManager().registerEvents(new FlightListener(), this);
+
+			this.factionsEnabled = true;
+			
+			Chat.log("&aEnabled FactionsX Support");
+		}
 
 		registerEvents();
 		registerConfig();

@@ -41,8 +41,12 @@
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
         <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
+            <id>ender-repo</id>
+            <url>https://ci.ender.zone/plugin/repository/everything/</url>
+        </repository>
+        <repository>
+            <id>savagelabs</id>
+            <url>https://nexus.savagelabs.net/repository/maven-releases/</url>
         </repository>
     </repositories>
 
@@ -60,9 +64,21 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.github.drtshock</groupId>
+            <groupId>com.massivecraft</groupId>
             <artifactId>Factions</artifactId>
-            <version>0.5.18</version>
+            <version>1.6.9.5-U0.5.18</version>
+        </dependency>
+        <dependency>
+            <groupId>net.prosavage.factionsx</groupId>
+            <artifactId>FactionsX</artifactId>
+            <version>1.0.8-RC</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.prosavage.factionsx.addonframework</groupId>
+            <artifactId>AddonFramework</artifactId>
+            <version>1.0.8-RC</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>
