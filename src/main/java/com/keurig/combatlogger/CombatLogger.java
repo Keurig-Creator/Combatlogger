@@ -25,7 +25,7 @@ public class CombatLogger extends JavaPlugin {
 
 	@Getter
 	private PunishmentManager punishmentManager;
-	
+
 	private FactionsManager factionsManager;
 
 	@Getter

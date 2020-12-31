@@ -32,6 +32,11 @@
       <option name="url" value="https://nexus.savagelabs.net/repository/maven-releases/" />
     </remote-repository>
     <remote-repository>
+      <option name="id" value="bintray.kotlin.eap" />
+      <option name="name" value="Bintray Kotlin EAP Repository" />
+      <option name="url" value="https://dl.bintray.com/kotlin/kotlin-eap" />
+    </remote-repository>
+    <remote-repository>
       <option name="id" value="central" />
       <option name="name" value="Maven Central repository" />
       <option name="url" value="https://repo1.maven.org/maven2" />
