@@ -5,6 +5,8 @@ import com.keurig.combatlogger.listeners.AttackListener;
 import com.keurig.combatlogger.listeners.DeathListener;
 import com.keurig.combatlogger.listeners.JoinListener;
 import com.keurig.combatlogger.punishment.PunishmentManager;
+import com.keurig.combatlogger.utils.factions.FactionsHook;
+import com.keurig.combatlogger.utils.factions.FactionsManager;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -24,8 +26,16 @@ public class CombatLogger extends JavaPlugin {
 	@Getter
 	private PunishmentManager punishmentManager;
 
+	private FactionsManager factionsManager;
+
+	@Getter
+	private static FactionsHook factionsHook;
+
 	@Getter
 	private String nsmVersion;
+
+	@Getter
+	private boolean factionsEnabled;
 
 	@Override
 	public void onEnable() {
@@ -35,6 +45,11 @@ public class CombatLogger extends JavaPlugin {
 
 		this.nsmVersion = Bukkit.getServer().getClass().getPackage().getName();
 		this.nsmVersion = this.nsmVersion.substring(this.nsmVersion.lastIndexOf(".") + 1);
+
+		this.factionsManager = new FactionsManager();
+
+		factionsHook = this.factionsManager.getFactionsHook();
+		this.factionsEnabled = this.factionsManager.isFactionsEnabled();
 
 		registerEvents();
 		registerConfig();

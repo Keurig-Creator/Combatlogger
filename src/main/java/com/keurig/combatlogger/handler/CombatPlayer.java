@@ -23,6 +23,7 @@ public class CombatPlayer {
 		this.plugin = plugin;
 
 		this.combatLogged = new HashMap<>();
+		
 		this.taskActionBar = new HashMap<>();
 		this.taskCombat = new HashMap<>();
 		this.players = new HashSet<>();
@@ -73,6 +74,9 @@ public class CombatPlayer {
 			}
 		}
 
+		if (!this.plugin.isFactionsEnabled())
+			player.setFlying(false);
+
 		if (useActionBar)
 			this.taskActionBar.put(player.getUniqueId(), Bukkit.getScheduler().scheduleSyncRepeatingTask(this.plugin, () -> {
 				assert combatOnActionBar != null;
@@ -111,7 +115,7 @@ public class CombatPlayer {
 	private long combatTimeRemaining(Player player) {
 		if (this.combatLogged.containsKey(player.getUniqueId()))
 			return this.combatLogged.get(player.getUniqueId()) - System.currentTimeMillis();
-		
+
 		return 0;
 	}
 }
