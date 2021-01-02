@@ -23,6 +23,7 @@ public class CombatPlayer {
 		this.plugin = plugin;
 
 		this.combatLogged = new HashMap<>();
+		
 		this.taskActionBar = new HashMap<>();
 		this.taskCombat = new HashMap<>();
 		this.players = new HashSet<>();

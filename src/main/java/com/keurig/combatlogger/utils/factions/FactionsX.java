@@ -41,7 +41,7 @@ public class FactionsX implements FactionsHook {
 	public List<String> subAliases() {
 
 		List<String> subAliases = new ArrayList<>();
-
+		
 		for (FCommand subCommand : net.prosavage.factionsx.FactionsX.baseCommand.getSubCommands()) {
 			subAliases.addAll(subCommand.getAliases());
 		}
