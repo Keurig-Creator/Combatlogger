@@ -14,7 +14,7 @@ chat:
 
 actionbar:
   # The message for going into combat (ACTIONBAR)
-  on-message: '&cYou are now in combat for {timeRemaining}s!'
+  on-message: '&cYou are now in combat for %combatlogger_timeformatted%!'
 
   # The message for going out of combat (ACTIONBAR)
   off-message: '&cYou are now out of combat!'
@@ -32,5 +32,5 @@ actionbar:
 #-----------
 #To disable punishments you can do `punishments: []`
 punishment:
-  - "BAN:10:&cYou logged out during combat \n Please wait {timeRemaining}s"
+  - "BAN:10:&cYou logged out during combat \n Please wait %combatlogger_timeformatted%"
   - "KILL"

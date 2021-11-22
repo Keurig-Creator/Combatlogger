@@ -2,9 +2,11 @@ package com.keurig.combatlogger.punishment.punishments;
 
 import com.keurig.combatlogger.punishment.Punishment;
 import com.keurig.combatlogger.utils.Chat;
+import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerPreLoginEvent;
 
 import java.util.HashMap;
@@ -23,11 +25,28 @@ public class BanPunishment extends Punishment {
         this.banned = new HashMap<>();
     }
 
+//    @EventHandler
+//    public void onPreJoin(PlayerPreLoginEvent event) {
+//
+//        String message = args[1];
+//        message = PlaceholderAPI.setPlaceholders()
+//
+//        if (this.banned.containsKey(event.getUniqueId()) && this.banned.get(event.getUniqueId()) > System.currentTimeMillis())
+//            event.disallow(PlayerPreLoginEvent.Result.KICK_BANNED, ChatColor.translateAlternateColorCodes('&',
+//                    this.args[1].replace("{timeRemaining}", Chat.timeFormat(this.banned.get(event.getUniqueId()) - System.currentTimeMillis()))));
+//    }
+
     @EventHandler
-    public void onPreJoin(PlayerPreLoginEvent event) {
-        if (this.banned.containsKey(event.getUniqueId()) && this.banned.get(event.getUniqueId()) > System.currentTimeMillis())
-            event.disallow(PlayerPreLoginEvent.Result.KICK_BANNED, ChatColor.translateAlternateColorCodes('&',
-                    this.args[1].replace("{timeRemaining}", Chat.timeFormat(this.banned.get(event.getUniqueId()) - System.currentTimeMillis()))));
+    public void onJoin(PlayerJoinEvent event) {
+        Player player = event.getPlayer();
+
+        if (banned.containsKey(player.getUniqueId()) && banned.get(player.getUniqueId()) > System.currentTimeMillis()) {
+            String message = args[1];
+            message = message.replace("%combatlogger_timeformatted%", Chat.timeFormat(this.banned.get(player.getUniqueId()) - System.currentTimeMillis()));
+            message = message.replace("{timeRemaining}", Chat.timeFormat(this.banned.get(player.getUniqueId()) - System.currentTimeMillis()));
+            message = PlaceholderAPI.setPlaceholders(player, message);
+            player.kickPlayer(Chat.color(message));
+        }
     }
 
     @Override
