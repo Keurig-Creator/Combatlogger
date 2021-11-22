@@ -78,6 +78,7 @@ fabric.properties
 .idea\jarRepositories.xml
 
 .idea\misc.xml
+.idea\compiler.xml
 
 /target
 
