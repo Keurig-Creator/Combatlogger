@@ -1,13 +1,11 @@
 package com.keurig.combatlogger.punishment.punishments;
 
+import com.keurig.combatlogger.CombatLogger;
 import com.keurig.combatlogger.punishment.Punishment;
 import com.keurig.combatlogger.utils.Chat;
-import me.clip.placeholderapi.PlaceholderAPI;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerPreLoginEvent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -44,7 +42,7 @@ public class BanPunishment extends Punishment {
             String message = args[1];
             message = message.replace("%combatlogger_timeformatted%", Chat.timeFormat(this.banned.get(player.getUniqueId()) - System.currentTimeMillis()));
             message = message.replace("{timeRemaining}", Chat.timeFormat(this.banned.get(player.getUniqueId()) - System.currentTimeMillis()));
-            message = PlaceholderAPI.setPlaceholders(player, message);
+            message = CombatLogger.getInstance().replaceMsg(player, message);
             player.kickPlayer(Chat.color(message));
         }
     }

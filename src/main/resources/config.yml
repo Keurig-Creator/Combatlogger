@@ -1,6 +1,18 @@
 # How many seconds the combat lasts for
 combat-timer: 15
 
+
+# List of blacklisted worlds that combat wont work in
+blacklisted-worlds:
+  - world_nether
+
+# List of blacklisted commands that cannot be used in combat
+blacklisted-commands:
+  - tp
+
+# Message issued when player uses a blacklisted command in combat
+blacklisted-command-message: '&cYou cannot run this command while in combat!'
+
 chat:
   # The message for going into combat (CHAT)
   on-message: '&cYou are now in combat!'
@@ -23,7 +35,7 @@ actionbar:
   use: true
 
 # The punishment activates when a user logs out during combat
-# Types: "KILL", "BAN:TIMEINSECONDS:REASON`{timeRemaining}=CURRENTBANTIME`"
+# Types: "KILL", "BAN:TIMEINSECONDS:REASON`{timeRemaining}=CURRENTBANTIME`, "WHITELIST""
 # To remove a punishment just remove the line examaple,
 # this will only kill the player when they log out during combat
 #-----------

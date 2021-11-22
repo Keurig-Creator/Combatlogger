@@ -2,6 +2,7 @@ package com.keurig.combatlogger;
 
 import com.keurig.combatlogger.handler.CombatPlayer;
 import com.keurig.combatlogger.listeners.AttackListener;
+import com.keurig.combatlogger.listeners.CommandListener;
 import com.keurig.combatlogger.listeners.DeathListener;
 import com.keurig.combatlogger.listeners.JoinListener;
 import com.keurig.combatlogger.punishment.PunishmentManager;
@@ -9,6 +10,7 @@ import com.keurig.combatlogger.utils.PlaceholderAPIHook;
 import com.keurig.combatlogger.utils.factions.FactionsHook;
 import com.keurig.combatlogger.utils.factions.FactionsManager;
 import lombok.Getter;
+import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -38,12 +40,16 @@ public class CombatLogger extends JavaPlugin {
     @Getter
     private boolean factionsEnabled;
 
+    @Getter
+    private PlaceholderAPIHook placeholderAPIHook;
+
     @Override
     public void onEnable() {
         instance = this;
-        
+
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
-            new PlaceholderAPIHook().register();
+            placeholderAPIHook = new PlaceholderAPIHook();
+            placeholderAPIHook.register();
         }
 
         this.combatPlayer = new CombatPlayer(this);
@@ -70,11 +76,20 @@ public class CombatLogger extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new AttackListener(), this);
         Bukkit.getPluginManager().registerEvents(new JoinListener(), this);
         Bukkit.getPluginManager().registerEvents(new DeathListener(), this);
+        Bukkit.getPluginManager().registerEvents(new CommandListener(this), this);
     }
 
     public void registerConfig() {
         getConfig().options().copyDefaults();
         saveDefaultConfig();
+    }
+
+    public String replaceMsg(Player player, String message) {
+        if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+            return PlaceholderAPI.setPlaceholders(player, message);
+        }
+
+        return message;
     }
 
     /**

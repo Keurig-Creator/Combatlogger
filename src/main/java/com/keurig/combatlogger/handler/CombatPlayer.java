@@ -3,7 +3,6 @@ package com.keurig.combatlogger.handler;
 import com.keurig.combatlogger.CombatLogger;
 import com.keurig.combatlogger.actionbar.ActionBar;
 import lombok.Getter;
-import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -58,13 +57,13 @@ public class CombatPlayer {
         final int combatTimer = this.plugin.getConfig().getInt("combat-timer");
 
         final boolean useChat = this.plugin.getConfig().getBoolean("chat.use");
-        final String combatOnChat = PlaceholderAPI.setPlaceholders(player, this.plugin.getConfig().getString("chat.on-message"));
-        final String combatOffChat = PlaceholderAPI.setPlaceholders(player, this.plugin.getConfig().getString("chat.off-message"));
+        final String combatOnChat = plugin.replaceMsg(player, this.plugin.getConfig().getString("chat.on-message"));
+        final String combatOffChat = plugin.replaceMsg(player, this.plugin.getConfig().getString("chat.off-message"));
 
 
         final boolean useActionBar = this.plugin.getConfig().getBoolean("actionbar.use");
-        final String combatOnActionBar = PlaceholderAPI.setPlaceholders(player, this.plugin.getConfig().getString("actionbar.on-message"));
-        final String combatOffActionBar = PlaceholderAPI.setPlaceholders(player, this.plugin.getConfig().getString("actionbar.off-message"));
+        final String combatOnActionBar = plugin.replaceMsg(player, this.plugin.getConfig().getString("actionbar.on-message"));
+        final String combatOffActionBar = plugin.replaceMsg(player, this.plugin.getConfig().getString("actionbar.off-message"));
 
         if (isTagged(player)) {
             stopTasks(player);
