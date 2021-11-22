@@ -2,7 +2,6 @@ package com.keurig.combatlogger.utils.factions;
 
 import com.keurig.combatlogger.CombatLogger;
 import com.keurig.combatlogger.listeners.CommandFlightListener;
-import com.keurig.combatlogger.listeners.FlightListener;
 import com.keurig.combatlogger.utils.Chat;
 import lombok.Getter;
 import org.bukkit.Bukkit;
@@ -10,32 +9,25 @@ import org.bukkit.Bukkit;
 @Getter
 public class FactionsManager {
 
-	private FactionsHook factionsHook;
+    private FactionsHook factionsHook;
 
-	private final boolean factionsEnabled;
+    private final boolean factionsEnabled;
 
-	public FactionsManager() {
-		CombatLogger plugin = CombatLogger.getInstance();
+    public FactionsManager() {
+        CombatLogger plugin = CombatLogger.getInstance();
 
-		if (Bukkit.getPluginManager().isPluginEnabled("Factions")) {
-			this.factionsHook = new FactionsUUID();
-			Bukkit.getPluginManager().registerEvents(new CommandFlightListener(), plugin);
+        if (Bukkit.getPluginManager().isPluginEnabled("Factions")) {
+            this.factionsHook = new FactionsUUID();
+            Bukkit.getPluginManager().registerEvents(new CommandFlightListener(), plugin);
 
-			this.factionsEnabled = true;
+            this.factionsEnabled = true;
 
-			Chat.log("&aEnabled FactionsUUID Support");
-		} else if (Bukkit.getPluginManager().isPluginEnabled("FactionsX")) {
-			this.factionsHook = new FactionsX();
-			Bukkit.getPluginManager().registerEvents(new FlightListener(), plugin);
+            Chat.log("&aEnabled FactionsUUID Support");
+        } else {
+            this.factionsEnabled = false;
 
-			this.factionsEnabled = true;
+            Chat.log("&cFactions not found! Disabling faction support");
+        }
 
-			Chat.log("&aEnabled FactionsX Support");
-		} else {
-			this.factionsEnabled = false;
-
-			Chat.log("&cFactions not found! Disabling faction support");
-		}
-
-	}
+    }
 }
