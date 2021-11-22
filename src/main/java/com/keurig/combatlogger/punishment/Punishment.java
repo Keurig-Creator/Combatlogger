@@ -11,35 +11,35 @@ import org.bukkit.event.Listener;
 @ToString
 public abstract class Punishment implements Listener {
 
-	/**
-	 * Get the player who logged out during combat.
-	 */
-	private Player player;
+    /**
+     * Get the player who logged out during combat.
+     */
+    private Player player;
 
-	/**
-	 * Get the name of the punishment used in config.yml use `UPPER CASE` format.
-	 */
-	private final String name;
+    /**
+     * Get the name of the punishment used in config.yml use `UPPER CASE` format.
+     */
+    private final String name;
 
-	/**
-	 * Get the amount of args required for the punishment, if none then not needed.
-	 */
-	private final int numberArgs;
+    /**
+     * Get the amount of args required for the punishment, if none then not needed.
+     */
+    private final int numberArgs;
 
-	public Punishment(String name) {
-		this(name, 0);
-	}
+    public Punishment(String name) {
+        this(name, 0);
+    }
 
-	public Punishment(String name, int numberArgs) {
-		this.name = name;
-		this.numberArgs = numberArgs;
-	}
+    public Punishment(String name, int numberArgs) {
+        this.name = name;
+        this.numberArgs = numberArgs;
+    }
 
-	/**
-	 * Runs when the player quits the server duringW combat.
-	 *
-	 * @param label the name of the punishment
-	 * @param args  the arguments used
-	 */
-	public abstract void onQuit(String label, String[] args);
+    /**
+     * Runs when the player quits the server during combat.
+     *
+     * @param label the name of the punishment
+     * @param args  the arguments used
+     */
+    public abstract void onQuit(String label, String[] args);
 }
