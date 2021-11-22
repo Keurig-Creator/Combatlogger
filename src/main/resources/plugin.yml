@@ -4,7 +4,9 @@ main: com.keurig.combatlogger.CombatLogger
 authors: [ Keurig ]
 description: A simple combat logger plugin!
 api-version: 1.17
-softdepend: [ Factions, PlaceholderAPI ]
+softdepend:
+  - Factions
+  - PlaceholderAPI
 permissions:
   combatlogger.admin:
     default: false

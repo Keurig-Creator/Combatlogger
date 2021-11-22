@@ -5,6 +5,7 @@ import com.keurig.combatlogger.listeners.AttackListener;
 import com.keurig.combatlogger.listeners.DeathListener;
 import com.keurig.combatlogger.listeners.JoinListener;
 import com.keurig.combatlogger.punishment.PunishmentManager;
+import com.keurig.combatlogger.utils.PlaceholderAPIHook;
 import com.keurig.combatlogger.utils.factions.FactionsHook;
 import com.keurig.combatlogger.utils.factions.FactionsManager;
 import lombok.Getter;
@@ -14,69 +15,74 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class CombatLogger extends JavaPlugin {
 
-	/**
-	 * Get the instance of the CombatLogger.
-	 */
-	@Getter
-	private static CombatLogger instance;
+    /**
+     * Get the instance of the CombatLogger.
+     */
+    @Getter
+    private static CombatLogger instance;
 
-	@Getter
-	private CombatPlayer combatPlayer;
+    @Getter
+    private CombatPlayer combatPlayer;
 
-	@Getter
-	private PunishmentManager punishmentManager;
+    @Getter
+    private PunishmentManager punishmentManager;
 
-	private FactionsManager factionsManager;
+    private FactionsManager factionsManager;
 
-	@Getter
-	private static FactionsHook factionsHook;
+    @Getter
+    private static FactionsHook factionsHook;
 
-	@Getter
-	private String nsmVersion;
+    @Getter
+    private String nsmVersion;
 
-	@Getter
-	private boolean factionsEnabled;
+    @Getter
+    private boolean factionsEnabled;
 
-	@Override
-	public void onEnable() {
-		instance = this;
-		this.combatPlayer = new CombatPlayer(this);
-		this.punishmentManager = new PunishmentManager();
+    @Override
+    public void onEnable() {
+        instance = this;
+        
+        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            new PlaceholderAPIHook().register();
+        }
 
-		this.nsmVersion = Bukkit.getServer().getClass().getPackage().getName();
-		this.nsmVersion = this.nsmVersion.substring(this.nsmVersion.lastIndexOf(".") + 1);
+        this.combatPlayer = new CombatPlayer(this);
+        this.punishmentManager = new PunishmentManager();
 
-		this.factionsManager = new FactionsManager();
+        this.nsmVersion = Bukkit.getServer().getClass().getPackage().getName();
+        this.nsmVersion = this.nsmVersion.substring(this.nsmVersion.lastIndexOf(".") + 1);
 
-		factionsHook = this.factionsManager.getFactionsHook();
-		this.factionsEnabled = this.factionsManager.isFactionsEnabled();
+        this.factionsManager = new FactionsManager();
 
-		registerEvents();
-		registerConfig();
-	}
+        factionsHook = this.factionsManager.getFactionsHook();
+        this.factionsEnabled = this.factionsManager.isFactionsEnabled();
 
-	@Override
-	public void onDisable() {
-		this.punishmentManager.unregisterPunishments();
-	}
+        registerEvents();
+        registerConfig();
+    }
 
-	public void registerEvents() {
-		Bukkit.getPluginManager().registerEvents(new AttackListener(), this);
-		Bukkit.getPluginManager().registerEvents(new JoinListener(), this);
-		Bukkit.getPluginManager().registerEvents(new DeathListener(), this);
-	}
+    @Override
+    public void onDisable() {
+        this.punishmentManager.unregisterPunishments();
+    }
 
-	public void registerConfig() {
-		getConfig().options().copyDefaults();
-		saveDefaultConfig();
-	}
+    public void registerEvents() {
+        Bukkit.getPluginManager().registerEvents(new AttackListener(), this);
+        Bukkit.getPluginManager().registerEvents(new JoinListener(), this);
+        Bukkit.getPluginManager().registerEvents(new DeathListener(), this);
+    }
 
-	/**
-	 * @param player get the player tagged check.
-	 * @return true if user is tagged else false
-	 * @deprecated moved api to CombatLoggerAPI.isTagged(Player)
-	 */
-	public boolean isTagged(Player player) {
-		return getCombatPlayer().getCombatLogged().containsKey(player.getUniqueId());
-	}
+    public void registerConfig() {
+        getConfig().options().copyDefaults();
+        saveDefaultConfig();
+    }
+
+    /**
+     * @param player get the player tagged check.
+     * @return true if user is tagged else false
+     * @deprecated moved api to CombatLoggerAPI.isTagged(Player)
+     */
+    public boolean isTagged(Player player) {
+        return getCombatPlayer().getCombatLogged().containsKey(player.getUniqueId());
+    }
 }
