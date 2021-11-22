@@ -33,6 +33,10 @@
             <id>savagelabs</id>
             <url>https://nexus.savagelabs.net/repository/maven-releases/</url>
         </repository>
+        <repository>
+            <id>placeholderapi</id>
+            <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -52,6 +56,12 @@
             <groupId>com.massivecraft</groupId>
             <artifactId>Factions</artifactId>
             <version>1.6.9.5-U0.5.18</version>
+        </dependency>
+        <dependency>
+            <groupId>me.clip</groupId>
+            <artifactId>placeholderapi</artifactId>
+            <version>{VERSION}</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>
