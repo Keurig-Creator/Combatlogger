@@ -73,6 +73,12 @@ fabric.properties
 # Android studio 3.1+ serialized cache file
 .idea/caches/build_file_checksums.ser
 
+.idea\compiler.xml
+
+.idea\jarRepositories.xml
+
+.idea\misc.xml
+
 /target
 
 CombatLogger.iml
