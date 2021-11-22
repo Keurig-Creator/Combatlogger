@@ -1,7 +1,6 @@
 # How many seconds the combat lasts for
 combat-timer: 15
 
-
 # List of blacklisted worlds that combat wont work in
 blacklisted-worlds:
   - world_nether
