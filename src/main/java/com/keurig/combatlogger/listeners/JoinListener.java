@@ -14,31 +14,31 @@ import org.bukkit.event.player.PlayerQuitEvent;
 @RequiredArgsConstructor
 public class JoinListener implements Listener {
 
-	private final CombatLogger plugin = CombatLogger.getInstance();
+    private final CombatLogger plugin = CombatLogger.getInstance();
 
-	@EventHandler
-	public void onQuitCombat(PlayerCombatQuitEvent event) {
-		final Player player = event.getPlayer();
-		this.plugin.getPunishmentManager().onQuit(player);
-	}
+    @EventHandler
+    public void onQuitCombat(PlayerCombatQuitEvent event) {
+        final Player player = event.getPlayer();
+        this.plugin.getPunishmentManager().onQuit(player);
+    }
 
-	@EventHandler
-	public void onQuit(PlayerQuitEvent event) {
-		Player player = event.getPlayer();
+    @EventHandler
+    public void onQuit(PlayerQuitEvent event) {
+        Player player = event.getPlayer();
 
-		if (CombatLoggerAPI.isTagged(player)) {
-			PlayerCombatQuitEvent bukkitEvent = new PlayerCombatQuitEvent(player);
-			Bukkit.getPluginManager().callEvent(bukkitEvent);
-		}
+        if (CombatLoggerAPI.isTagged(player)) {
+            PlayerCombatQuitEvent bukkitEvent = new PlayerCombatQuitEvent(player);
+            Bukkit.getPluginManager().callEvent(bukkitEvent);
+        }
 
-		this.plugin.getCombatPlayer().removePlayer(player);
-	}
+        this.plugin.getCombatPlayer().removePlayer(player);
+    }
 
-	@EventHandler
-	public void onJoin(PlayerJoinEvent event) {
-		final Player player = event.getPlayer();
-		this.plugin.getCombatPlayer().addPlayer(player);
-	}
+    @EventHandler
+    public void onJoin(PlayerJoinEvent event) {
+        final Player player = event.getPlayer();
+        this.plugin.getCombatPlayer().addPlayer(player);
+    }
 }
 
 
