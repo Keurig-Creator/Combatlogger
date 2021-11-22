@@ -44,26 +44,14 @@
         </dependency>
         <dependency>
             <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-api</artifactId>
-            <version>1.16.4-R0.1-SNAPSHOT</version>
+            <artifactId>spigot</artifactId>
+            <version>1.17.1-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.massivecraft</groupId>
             <artifactId>Factions</artifactId>
             <version>1.6.9.5-U0.5.18</version>
-        </dependency>
-        <dependency>
-            <groupId>net.prosavage.factionsx</groupId>
-            <artifactId>FactionsX</artifactId>
-            <version>1.0.8-RC</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>net.prosavage.factionsx.addonframework</groupId>
-            <artifactId>AddonFramework</artifactId>
-            <version>1.0.8-RC</version>
-            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>
