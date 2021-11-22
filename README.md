@@ -13,8 +13,8 @@ Dependency with MAVEN
         <dependency>
             <groupId>com.github.Keurig-Creator</groupId>
             <artifactId>CombatLogger</artifactId>
-            <version>VERSION</version>
+            <version>{VERSION}</version>
         </dependency>
 ```
 
-Replace `Version` with the latest version found here https://github.com/Keurig-Creator/Combatlogger/releases
+Replace `{Version}` with the latest version found here https://github.com/Keurig-Creator/Combatlogger/releases
