@@ -81,6 +81,8 @@ fabric.properties
 .idea\compiler.xml
 .idea\encodings.xml
 .idea
+.idea\jarRepositories.xml
+.idea\misc.xml
 
 /target
 
