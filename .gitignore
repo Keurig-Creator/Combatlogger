@@ -79,6 +79,8 @@ fabric.properties
 
 .idea\misc.xml
 .idea\compiler.xml
+.idea\encodings.xml
+.idea
 
 /target
 
