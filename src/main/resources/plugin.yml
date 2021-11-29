@@ -1,12 +1,6 @@
 name: CombatLogger
 version: '${project.version}'
-main: com.keurig.combatlogger.CombatLogger
-authors: [ Keurig ]
-description: A simple combat logger plugin!
+main: com.keurig.combatlogger.CombatLoggerPlugin
 api-version: 1.17
-softdepend:
-  - Factions
-  - PlaceholderAPI
-permissions:
-  combatlogger.admin:
-    default: false
+authors: [ Keurig ]
+description: CombatLogger is a simple lightweight easy to use combat log plugin!

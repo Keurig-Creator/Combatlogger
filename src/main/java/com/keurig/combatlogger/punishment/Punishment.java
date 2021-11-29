@@ -2,44 +2,33 @@ package com.keurig.combatlogger.punishment;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 
-@Getter
-@Setter
-@ToString
 public abstract class Punishment implements Listener {
 
-    /**
-     * Get the player who logged out during combat.
-     */
+    private final PunishmentHandler handler;
+
+    @Getter
+    @Setter
     private Player player;
 
-    /**
-     * Get the name of the punishment used in config.yml use `UPPER CASE` format.
-     */
-    private final String name;
+    @Getter
+    private final String label;
 
-    /**
-     * Get the amount of args required for the punishment, if none then not needed.
-     */
-    private final int numberArgs;
-
-    public Punishment(String name) {
-        this(name, 0);
+    public Punishment(PunishmentHandler handler, String label) {
+        this.handler = handler;
+        this.label = label;
     }
 
-    public Punishment(String name, int numberArgs) {
-        this.name = name;
-        this.numberArgs = numberArgs;
+    public abstract void runPunishment();
+
+    public String getString(String key) {
+        System.out.println("punishment" + "." + label + "." + key);
+        return handler.getConfig().getString(handler.getPunishmentPath() + "." + label + "." + key);
     }
 
-    /**
-     * Runs when the player quits the server during combat.
-     *
-     * @param label the name of the punishment
-     * @param args  the arguments used
-     */
-    public abstract void onQuit(String label, String[] args);
+    public int getInt(String key) {
+        return handler.getConfig().getInt(handler.getPunishmentPath() + "." + label + "." + key);
+    }
 }

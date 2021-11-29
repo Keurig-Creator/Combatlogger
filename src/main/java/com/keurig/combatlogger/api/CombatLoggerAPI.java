@@ -1,33 +1,41 @@
 package com.keurig.combatlogger.api;
 
-import com.keurig.combatlogger.CombatLogger;
 import org.bukkit.entity.Player;
 
-import java.util.Map;
 import java.util.UUID;
 
-public class CombatLoggerAPI {
+public interface CombatLoggerAPI {
 
-	/**
-	 * Check if the player is tagged or not.
-	 *
-	 * @param player get the player tagged check
-	 * @return true if user is tagged else false
-	 */
-	public static boolean isTagged(Player player) {
-		final Map<UUID, Long> combatLogged = CombatLogger.getInstance().getCombatPlayer().getCombatLogged();
-		return combatLogged.containsKey(player.getUniqueId()) && combatLogged.get(player.getUniqueId()) > System.currentTimeMillis();
-	}
+    /**
+     * Finds player and returns if the user is in combat.
+     *
+     * @param player which you want to check
+     * @return true/false
+     */
+    boolean isTagged(Player player);
 
-	/**
-	 * Get players combat time remaining.
-	 *
-	 * @param player get the player of time left
-	 * @return the time left of players combat
-	 */
-	public static long timeRemaining(Player player) {
-		final Map<UUID, Long> combatLogged = CombatLogger.getInstance().getCombatPlayer().getCombatLogged();
-		return isTagged(player) ? combatLogged.get(player.getUniqueId()) - System.currentTimeMillis() : 0;
-	}
+    /**
+     * Finds player with uuid and returns if the user is in combat.
+     *
+     * @param uuid of player which you want to check
+     * @return true/false
+     */
+    boolean isTagged(UUID uuid);
+
+    /**
+     * Find remaining time on players combat
+     *
+     * @param player which you want to check
+     * @return remaining time
+     */
+    long timeRemaining(Player player);
+
+    /**
+     * Find remaining time on players combat
+     *
+     * @param uuid which you want to check
+     * @return remaining time
+     */
+    long timeRemaining(UUID uuid);
 
 }
