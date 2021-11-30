@@ -2,4 +2,4 @@ punishment:
   ban:
     message: "&cYou logged out during combat \n Please wait %combatlogger_timeformatted%"
     time: 10000
-  kill:
+  kill: []
