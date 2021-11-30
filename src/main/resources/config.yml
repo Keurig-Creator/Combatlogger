@@ -1,3 +1,17 @@
+permissions:
+  default:
+    punishment:
+      kill: []
+      ban:
+        message: "&cBuy a &fRANK &cto shorten ban time"
+        time: 60
+  vip:
+    permission: "combatlogger.vip"
+    punishment:
+      ban:
+        message: "&f#P2W!"
+        time: 10
+
 punishment:
   ban:
     message: "&cYou logged out during combat \n Please wait %combatlogger_timeformatted%"
