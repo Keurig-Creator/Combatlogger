@@ -23,6 +23,14 @@ public interface CombatLoggerAPI {
     boolean isTagged(UUID uuid);
 
     /**
+     * Finds the target who is tagged by player
+     *
+     * @param player player
+     * @return player of target
+     */
+    Player getTarget(Player player);
+
+    /**
      * Find remaining time on players combat
      *
      * @param player which you want to check
