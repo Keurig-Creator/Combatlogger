@@ -11,8 +11,6 @@ public class KillPunishment extends Punishment {
 
     @Override
     public void runPunishment() {
-
-        System.out.println("SENDING");
-
+        getPlayer().setHealth(0);
     }
 }
