@@ -57,14 +57,4 @@ public class PunishmentHandler {
     public void clear() {
         punishments.clear();
     }
-
-//    public Punishment getByName(String name) {
-//        for (Punishment punishment : punishments) {
-//            if (punishment.getLabel().equalsIgnoreCase(name)) {
-//                return punishment;
-//            }
-//        }
-//
-//        return null;
-//    }
 }
