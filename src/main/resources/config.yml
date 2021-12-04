@@ -1,11 +1,26 @@
 permissions:
   default:
+    message:
+      mon: '&cOn'
+      moff: '&aOff'
+    actionbar:
+      mon: '&5Action ON'
+      moff: '&5Combat off'
+    time: 15
     punishment:
-      kill: []
+      kill: [ ]
       ban:
         message: "&cBuy a &fRANK &cto shorten ban time"
         time: 60
   vip:
+    weight: 5
+    time: 5
+    message:
+      mon: '&cOn #P2'
+      moff: '&aOff #P2W'
+    actionbar:
+      mon: '&5Action ON #P2W'
+      moff: '&5Combat off #P2W'
     permission: "combatlogger.vip"
     punishment:
       ban:
@@ -16,4 +31,4 @@ punishment:
   ban:
     message: "&cYou logged out during combat \n Please wait %combatlogger_timeformatted%"
     time: 10000
-  kill: []
+  kill: [ ]
