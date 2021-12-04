@@ -82,6 +82,8 @@ fabric.properties
 
 /target
 
+.idea
+
 CombatLogger.iml
 .idea/artifacts/Combatlogger_jar.xml
 .idea/compiler.xml
