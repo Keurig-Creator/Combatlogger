@@ -16,12 +16,12 @@ public class APIHandler implements CombatLoggerAPI {
 
     @Override
     public boolean isTagged(Player player) {
-        return true;
+        return plugin.getLoggedPlayers().containsKey(player.getUniqueId());
     }
 
     @Override
     public boolean isTagged(UUID uuid) {
-        return false;
+        return plugin.getLoggedPlayers().containsKey(uuid);
     }
 
     @Override
