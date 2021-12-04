@@ -3,11 +3,14 @@ package com.keurig.combatlogger;
 import com.keurig.combatlogger.api.APIHandler;
 import com.keurig.combatlogger.api.CombatLoggerAPI;
 import com.keurig.combatlogger.listeners.JoinListener;
+import com.keurig.combatlogger.permission.PermissionHandler;
 import com.keurig.combatlogger.punishment.PunishmentHandler;
 import com.keurig.combatlogger.runnables.CombatRemoveRunnable;
 import lombok.Getter;
+import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
@@ -30,12 +33,22 @@ public final class CombatLoggerPlugin extends JavaPlugin {
     @Getter
     private PunishmentHandler punishmentHandler;
 
+    @Getter
+    private PermissionHandler permissionHandler;
+
+    @Getter
+    private static Permission perms = null;
+
+
     @Override
     public void onEnable() {
+        setupPermissions();
+
         API = new APIHandler(this);
         saveDefaultConfig();
 
-        punishmentHandler = new PunishmentHandler(getConfig());
+        punishmentHandler = new PunishmentHandler(this);
+        permissionHandler = new PermissionHandler(this);
 
         Bukkit.getPluginManager().registerEvents(new JoinListener(this), this);
 
@@ -48,19 +61,33 @@ public final class CombatLoggerPlugin extends JavaPlugin {
         }
     }
 
+    private boolean setupPermissions() {
+        RegisteredServiceProvider<Permission> rsp = getServer().getServicesManager().getRegistration(Permission.class);
+        perms = rsp.getProvider();
+        return perms != null;
+    }
+
+
     public void addLogged(Player player, Player target) {
+
+        if (loggedPlayers.containsKey(player.getUniqueId())) {
+
+        } else {
+
+
+            player.sendMessage("IN COMBAT");
+        }
+
         removeLogged(player.getUniqueId());
 
-        CombatRemoveRunnable combatRemoveRunnable = new CombatRemoveRunnable(player, target);
+        CombatRemoveRunnable combatRemoveRunnable = new CombatRemoveRunnable(loggedPlayers, player, target);
         loggedPlayers.put(player.getUniqueId(), combatRemoveRunnable);
         combatRemoveRunnable.runTaskLater(this, 20 * 2);
-
     }
 
     public void removeLogged(UUID uuid) {
         if (loggedPlayers.containsKey(uuid)) {
             loggedPlayers.get(uuid).cancel();
-            loggedPlayers.remove(uuid);
         }
     }
 }
