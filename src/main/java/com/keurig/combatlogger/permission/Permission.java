@@ -24,19 +24,19 @@ public class Permission {
     }
 
     public void setActionMessage(String on, String off) {
-        messages.put("actionbar", new Message(on, off));
+        messages.put("Actionbar", new Message(on, off));
     }
 
     public void setChatMessage(String on, String off) {
-        messages.put("message", new Message(on, off));
+        messages.put("Message", new Message(on, off));
     }
 
     public Message getChatMessage() {
-        return messages.get("message");
+        return messages.get("Message");
     }
 
     public Message getActionbar() {
-        return messages.get("actionbar");
+        return messages.get("Actionbar");
     }
 
     @Override

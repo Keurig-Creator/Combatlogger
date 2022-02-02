@@ -15,8 +15,11 @@ public class PermissionHandler {
 
     private final Map<String, Permission> permissionMap = new HashMap<>();
 
+    net.milkbowl.vault.permission.Permission perms;
+
     public PermissionHandler(CombatLoggerPlugin plugin) {
         this.plugin = plugin;
+        this.perms = plugin.getPerms();
 
         loadAllPermissions();
     }
@@ -24,48 +27,56 @@ public class PermissionHandler {
     private void loadAllPermissions() {
         FileConfiguration config = plugin.getConfig();
 
-        ConfigurationSection permSection = config.getConfigurationSection("permissions");
+        ConfigurationSection permSection = config.getConfigurationSection("Permissions");
 
         for (String key : permSection.getKeys(false)) {
-            ConfigurationSection k = permSection.getConfigurationSection(key);
+
             String permissionString = "";
 
-            if (!key.equalsIgnoreCase("default")) {
-                permissionString = permSection.getString(key + ".permission");
+            if (!key.equalsIgnoreCase("Default")) {
+                if (!plugin.isVaultEnabled()) {
+                    continue;
+                }
+                permissionString = permSection.getString(key + ".Permission");
             }
 
-            System.out.println(config.getString("permissions." + key + ".actionbar.on"));
-            Bukkit.getLogger().info(String.valueOf(permSection.getLong(key + ".time")));
-            Bukkit.getLogger().info(permissionString);
-            Permission permission = new Permission(permSection.getLong(key + ".time"), permissionString, permSection.getInt(key + ".weight"));
-            permission.setChatMessage(permSection.getString(key + ".message.mon"), permSection.getString(key + ".message.moff"));
-            permission.setActionMessage(permSection.getString(key + ".actionbar.mon"), permSection.getString(key + ".actionbar.moff"));
-            Bukkit.getLogger().info(permission.getChatMessage().toString());
-            Bukkit.getLogger().info(permission.getActionbar().toString());
+            Permission permission = new Permission(permSection.getLong(key + ".Time"), permissionString, permSection.getInt(key + ".Weight"));
+            permission.setChatMessage(permSection.getString(key + ".Message.MessageOn"), permSection.getString(key + ".Message.MessageOff"));
+            permission.setActionMessage(permSection.getString(key + ".Actionbar.MessageOn"), permSection.getString(key + ".Actionbar.MessageOff"));
+
             permissionMap.put(key, permission);
+            Bukkit.getPluginManager().addPermission(new org.bukkit.permissions.Permission(permission.getPermission()));
+
+            System.out.println(key);
         }
     }
 
     public Permission getPermission(Player player) {
 
-        Permission permission = permissionMap.get("default");
-        for (Map.Entry<String, Permission> en : permissionMap.entrySet()) {
-            String key = en.getKey();
-            Permission value = en.getValue();
+        Permission permission = getDefault();
 
-            if (key.equalsIgnoreCase("default"))
-                continue;
+        if (plugin.isVaultEnabled()) {
+            for (Map.Entry<String, Permission> en : permissionMap.entrySet()) {
+                String key = en.getKey();
+                Permission value = en.getValue();
 
-            System.out.println(value.toString());
-            if (permission.getWeight() > value.getWeight()) {
-                continue;
-            }
-            
-            if (CombatLoggerPlugin.getPerms().playerHas(player, value.getPermission())) {
-                permission = value;
+                if (key.equalsIgnoreCase("Default"))
+                    continue;
+
+                if (permission.getWeight() > value.getWeight()) {
+                    continue;
+                }
+
+                if (perms.playerHas(player, value.getPermission())) {
+                    permission = value;
+                }
             }
         }
 
         return permission;
+    }
+
+    public Permission getDefault() {
+        return permissionMap.get("Default");
     }
 }

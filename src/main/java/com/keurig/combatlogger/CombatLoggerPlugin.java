@@ -6,6 +6,7 @@ import com.keurig.combatlogger.listeners.JoinListener;
 import com.keurig.combatlogger.permission.PermissionHandler;
 import com.keurig.combatlogger.punishment.PunishmentHandler;
 import com.keurig.combatlogger.runnables.CombatRemoveRunnable;
+import com.keurig.combatlogger.utils.Updater;
 import lombok.Getter;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
@@ -37,12 +38,34 @@ public final class CombatLoggerPlugin extends JavaPlugin {
     private PermissionHandler permissionHandler;
 
     @Getter
-    private static Permission perms = null;
+    private Permission perms = null;
 
+    @Getter
+    private boolean vaultEnabled;
+
+    @Getter
+    private Updater updater;
 
     @Override
     public void onEnable() {
-        setupPermissions();
+
+        updater = new Updater(this);
+        updater.getVersion(spigotVersion -> {
+            int spigotVersionNumber = Integer.parseInt(spigotVersion.replace(".", ""));
+            int pluginVersionNumber = Integer.parseInt(getDescription().getVersion().replace(".", ""));
+
+            if (spigotVersionNumber > pluginVersionNumber) {
+                getLogger().info("There is a new update available. New Version (" + spigotVersion + ") Your Version (" + getDescription().getVersion() + ")");
+            } else if (pluginVersionNumber > spigotVersionNumber) {
+                getLogger().info("Houston we have a problem... Some how we have time traveled with versions?? Old Version (" + spigotVersion + ") Your Future Version (" + getDescription().getVersion() + ")");
+            } else {
+                getLogger().info("All up to date!");
+            }
+        });
+
+        if (setupPermissions()) {
+            vaultEnabled = true;
+        }
 
         API = new APIHandler(this);
         saveDefaultConfig();
@@ -62,7 +85,13 @@ public final class CombatLoggerPlugin extends JavaPlugin {
     }
 
     private boolean setupPermissions() {
-        RegisteredServiceProvider<Permission> rsp = getServer().getServicesManager().getRegistration(Permission.class);
+        RegisteredServiceProvider<Permission> rsp = null;
+
+        try {
+            rsp = getServer().getServicesManager().getRegistration(Permission.class);
+        } catch (NoClassDefFoundError err) {
+            return false;
+        }
         perms = rsp.getProvider();
         return perms != null;
     }

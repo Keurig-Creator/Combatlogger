@@ -22,7 +22,7 @@ public class PunishmentHandler {
     private final CombatLoggerPlugin plugin;
 
     @Getter
-    private final String punishmentPath = "punishment";
+    private final String punishmentPath = "Punishment";
 
     public PunishmentHandler(CombatLoggerPlugin plugin) {
         this.plugin = plugin;
@@ -38,7 +38,7 @@ public class PunishmentHandler {
     }
 
     public void runPunishments(Player player) {
-        for (String str : config.getConfigurationSection("punishment").getKeys(false)) {
+        for (String str : config.getConfigurationSection("Punishment").getKeys(false)) {
             Punishment punishment = getByName(str);
 
             if (punishment == null) {

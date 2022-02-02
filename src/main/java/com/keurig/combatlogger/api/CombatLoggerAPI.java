@@ -1,10 +1,19 @@
 package com.keurig.combatlogger.api;
 
+import com.keurig.combatlogger.permission.Permission;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
 public interface CombatLoggerAPI {
+
+    /**
+     * Finds the group that the player should be associated with in the config REQUIRES VAULT or returns Default permission
+     *
+     * @param player the player you want to find the group
+     * @return group
+     */
+    Permission getPermission(Player player);
 
     /**
      * Finds player and returns if the user is in combat.

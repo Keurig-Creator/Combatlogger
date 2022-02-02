@@ -3,4 +3,9 @@ version: '${project.version}'
 main: com.keurig.combatlogger.CombatLoggerPlugin
 api-version: 1.17
 authors: [ Keurig ]
+softdepend:
+  - "Vault"
 description: CombatLogger is a simple lightweight easy to use combat log plugin!
+permissions:
+  combatlogger.updatenotify:
+    default: op
