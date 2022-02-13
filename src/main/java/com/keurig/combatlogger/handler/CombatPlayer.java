@@ -85,7 +85,10 @@ public class CombatPlayer {
 
         this.combatLogged.put(player.getUniqueId(), System.currentTimeMillis() + (combatTimer * 1000));
         this.taskCombat.put(player.getUniqueId(), Bukkit.getScheduler().runTaskLater(this.plugin, () -> {
-            Bukkit.getScheduler().cancelTask(this.taskActionBar.get(player.getUniqueId()));
+            if (taskActionBar.containsKey(player.getUniqueId())) {
+                Bukkit.getScheduler().cancelTask(this.taskActionBar.get(player.getUniqueId()));
+            }
+
             if (this.combatLogged.containsKey(player.getUniqueId())) {
                 if (useActionBar) {
                     assert combatOffActionBar != null;
@@ -104,8 +107,11 @@ public class CombatPlayer {
     }
 
     private void stopTasks(Player player) {
-        Bukkit.getScheduler().cancelTask(this.taskActionBar.get(player.getUniqueId()));
-        Bukkit.getScheduler().cancelTask(this.taskCombat.get(player.getUniqueId()));
+        if (taskActionBar.containsKey(player.getUniqueId()))
+            Bukkit.getScheduler().cancelTask(this.taskActionBar.get(player.getUniqueId()));
+
+        if (taskCombat.containsKey(player.getUniqueId()))
+            Bukkit.getScheduler().cancelTask(this.taskCombat.get(player.getUniqueId()));
     }
 
     private boolean isTagged(Player player) {
