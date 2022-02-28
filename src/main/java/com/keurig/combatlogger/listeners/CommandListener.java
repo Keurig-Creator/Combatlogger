@@ -5,6 +5,7 @@ import com.keurig.combatlogger.api.CombatLoggerAPI;
 import com.keurig.combatlogger.utils.Chat;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
@@ -16,8 +17,9 @@ public class CommandListener implements Listener {
         this.plugin = plugin;
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onCommand(PlayerCommandPreprocessEvent event) {
+
         Player player = event.getPlayer();
         String message = event.getMessage();
 
@@ -28,7 +30,7 @@ public class CommandListener implements Listener {
         String str = plugin.replaceMsg(player, plugin.getConfig().getString("blacklisted-command-message"));
 
         for (String command : plugin.getConfig().getStringList("blacklisted-commands")) {
-            if (message.equalsIgnoreCase("/" + command)) {
+            if (message.toLowerCase().contains("/" + command.toLowerCase())) {
                 Chat.message(player, str);
                 event.setCancelled(true);
                 return;
