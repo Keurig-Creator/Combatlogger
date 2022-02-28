@@ -14,7 +14,7 @@ public class Chat {
     }
 
     public static void message(Player player, String... messages) {
-        Arrays.stream(messages).forEach(player::sendMessage);
+        Arrays.stream(messages).forEach(s -> player.sendMessage(color(s)));
     }
 
     public static void message(CommandSender sender, String... messages) {
