@@ -2,6 +2,10 @@ package com.keurig.combatlogger.handler;
 
 import com.keurig.combatlogger.CombatLogger;
 import com.keurig.combatlogger.actionbar.ActionBar;
+import com.keurig.combatlogger.api.CombatLoggerAPI;
+import com.keurig.combatlogger.event.PlayerEnterCombatEvent;
+import com.keurig.combatlogger.event.PlayerLeaveCombatEvent;
+import com.keurig.combatlogger.utils.Chat;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -62,8 +66,10 @@ public class CombatPlayer {
 
 
         final boolean useActionBar = this.plugin.getConfig().getBoolean("actionbar.use");
-        final String combatOnActionBar = plugin.replaceMsg(player, this.plugin.getConfig().getString("actionbar.on-message"));
+        String combatOnActionBar = plugin.replaceMsg(player, this.plugin.getConfig().getString("actionbar.on-message"));
         final String combatOffActionBar = plugin.replaceMsg(player, this.plugin.getConfig().getString("actionbar.off-message"));
+
+        final boolean disableFlight = plugin.getConfig().getBoolean("disable-flight-on-combat");
 
         if (isTagged(player)) {
             stopTasks(player);
@@ -71,17 +77,32 @@ public class CombatPlayer {
             if (useChat) {
                 assert combatOnChat != null;
                 player.sendMessage(ChatColor.translateAlternateColorCodes('&', combatOnChat));
+
+                PlayerEnterCombatEvent enterCombatEvent = new PlayerEnterCombatEvent(player);
+                Bukkit.getPluginManager().callEvent(enterCombatEvent);
             }
         }
 
-        if (!this.plugin.isFactionsEnabled())
+        if (!this.plugin.isFactionsEnabled()) {
             player.setFlying(false);
+            player.setAllowFlight(false);
+        }
 
-        if (useActionBar)
+        if (disableFlight) {
+            player.setFlying(false);
+            player.setAllowFlight(false);
+        }
+
+        if (useActionBar) {
             this.taskActionBar.put(player.getUniqueId(), Bukkit.getScheduler().scheduleSyncRepeatingTask(this.plugin, () -> {
-                assert combatOnActionBar != null;
-                ActionBar.sendActionBar(player, ChatColor.translateAlternateColorCodes('&', combatOnActionBar.replace("{timeRemaining}", String.valueOf((combatTimeRemaining(player) / 1000) + 1))));
+                String finalCombatOnActionBar = combatOnActionBar;
+
+                finalCombatOnActionBar = finalCombatOnActionBar.replace("{timeRemaining}", Chat.timeFormat(CombatLoggerAPI.timeRemaining(player)));
+                finalCombatOnActionBar = finalCombatOnActionBar.replace("%combatlogger_timeformatted%", Chat.timeFormat(CombatLoggerAPI.timeRemaining(player)));
+                finalCombatOnActionBar = finalCombatOnActionBar.replace("%combatlogger_time%", String.valueOf(CombatLoggerAPI.timeRemaining(player)));
+                ActionBar.sendActionBar(player, ChatColor.translateAlternateColorCodes('&', finalCombatOnActionBar));
             }, 0, 0));
+        }
 
         this.combatLogged.put(player.getUniqueId(), System.currentTimeMillis() + (combatTimer * 1000));
         this.taskCombat.put(player.getUniqueId(), Bukkit.getScheduler().runTaskLater(this.plugin, () -> {
@@ -99,6 +120,10 @@ public class CombatPlayer {
                     assert combatOffChat != null;
                     player.sendMessage(ChatColor.translateAlternateColorCodes('&', combatOffChat));
                 }
+
+                PlayerLeaveCombatEvent leaveCombatEvent = new PlayerLeaveCombatEvent(player);
+                Bukkit.getPluginManager().callEvent(leaveCombatEvent);
+
                 this.combatLogged.remove(player.getUniqueId());
             }
 
