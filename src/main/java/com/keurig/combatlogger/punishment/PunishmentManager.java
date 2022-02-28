@@ -12,6 +12,7 @@ import org.bukkit.plugin.Plugin;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
 
 public class PunishmentManager {
 
@@ -69,7 +70,7 @@ public class PunishmentManager {
             String[] args = new String[0];
 
             if (getPunishmentByName(label) == null) {
-                System.out.println("Cannot find " + label + " punishment! Did you misspell it or forgot to register it?");
+                plugin.getLogger().log(Level.WARNING, "Cannot find " + label + " punishment! Did you misspell it or forgot to register it?");
                 continue;
             }
 
@@ -80,11 +81,11 @@ public class PunishmentManager {
                 args = Arrays.copyOfRange(split, 1, split.length);
 
                 if (punishment.getNumberArgs() != args.length) {
-                    System.out.println(punishment.getName() + ", must have " + punishment.getNumberArgs() + " argument" + (punishment.getNumberArgs() == 1 ? "" : "s") + "!");
+                    plugin.getLogger().log(Level.WARNING, punishment.getName() + ", must have " + punishment.getNumberArgs() + " argument" + (punishment.getNumberArgs() == 1 ? "" : "s") + "!");
                     continue;
                 }
             } else if (split.length >= 2) {
-                System.out.println(punishment.getName() + " Has no arguments!");
+                plugin.getLogger().log(Level.WARNING, punishment.getName() + " Has no arguments!");
                 continue;
             }
 
