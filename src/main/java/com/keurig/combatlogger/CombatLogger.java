@@ -1,10 +1,7 @@
 package com.keurig.combatlogger;
 
 import com.keurig.combatlogger.handler.CombatPlayer;
-import com.keurig.combatlogger.listeners.AttackListener;
-import com.keurig.combatlogger.listeners.CommandListener;
-import com.keurig.combatlogger.listeners.DeathListener;
-import com.keurig.combatlogger.listeners.JoinListener;
+import com.keurig.combatlogger.listeners.*;
 import com.keurig.combatlogger.punishment.PunishmentManager;
 import com.keurig.combatlogger.utils.PlaceholderAPIHook;
 import com.keurig.combatlogger.utils.factions.FactionsHook;
@@ -14,6 +11,8 @@ import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.List;
 
 public class CombatLogger extends JavaPlugin {
 
@@ -77,6 +76,12 @@ public class CombatLogger extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new JoinListener(), this);
         Bukkit.getPluginManager().registerEvents(new DeathListener(), this);
         Bukkit.getPluginManager().registerEvents(new CommandListener(this), this);
+
+        // Check if there are any regions, if not disable section
+        List<String> regions = getConfig().getStringList("protected-regions.regions");
+        if (!regions.isEmpty()) {
+            Bukkit.getPluginManager().registerEvents(new MoveListener(), this);
+        }
     }
 
     public void registerConfig() {
