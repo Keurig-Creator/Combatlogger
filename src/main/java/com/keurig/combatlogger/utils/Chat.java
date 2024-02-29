@@ -6,14 +6,26 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
+import java.util.UUID;
 
 public class Chat {
+
+    public static TempHashSet<UUID> temp = new TempHashSet<>(1000);
 
     public static String color(String message) {
         return ChatColor.translateAlternateColorCodes('&', message);
     }
 
     public static void message(Player player, String... messages) {
+        Arrays.stream(messages).forEach(s -> player.sendMessage(color(s)));
+    }
+
+    public static void message(Player player, double seconds, String... messages) {
+        if (temp.contains(player.getUniqueId())) {
+            return;
+        }
+
+        temp.add(player.getUniqueId());
         Arrays.stream(messages).forEach(s -> player.sendMessage(color(s)));
     }
 
