@@ -9,6 +9,7 @@ import com.keurig.combatlogger.utils.Chat;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 
 import java.util.*;
@@ -69,7 +70,10 @@ public class CombatPlayer {
         String combatOnActionBar = plugin.replaceMsg(player, this.plugin.getConfig().getString("actionbar.on-message"));
         final String combatOffActionBar = plugin.replaceMsg(player, this.plugin.getConfig().getString("actionbar.off-message"));
 
-        final boolean disableFlight = plugin.getConfig().getBoolean("disable-flight-on-combat");
+        final boolean disableFlight = plugin.getConfig().getBoolean("on-combat.disable-flight");
+        String forceGamemode = plugin.getConfig().getString("on-combat.force-gamemode");
+
+        assert forceGamemode != null;
 
         if (isTagged(player)) {
             stopTasks(player);
@@ -86,6 +90,15 @@ public class CombatPlayer {
         if (!this.plugin.isFactionsEnabled()) {
             player.setFlying(false);
             player.setAllowFlight(false);
+        }
+
+        if (!forceGamemode.isBlank() && !forceGamemode.isEmpty()) {
+            GameMode gameMode = GameMode.valueOf(forceGamemode.toUpperCase(Locale.ROOT));
+
+            if (!player.getGameMode().equals(gameMode)) {
+                player.setGameMode(gameMode);
+                player.sendMessage("gamemode changed to " + forceGamemode);
+            }
         }
 
         if (disableFlight) {
