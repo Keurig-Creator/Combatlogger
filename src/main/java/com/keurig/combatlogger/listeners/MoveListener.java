@@ -20,10 +20,6 @@ public class MoveListener implements Listener {
 
     private final CombatLogger plugin = CombatLogger.getInstance();
 
-    public MoveListener() {
-        System.out.println("registwered moved");
-    }
-
     @EventHandler
     public void onMove(PlayerMoveEvent event) {
 
@@ -46,9 +42,11 @@ public class MoveListener implements Listener {
             List<String> regionList = plugin.getConfig().getStringList("protected-regions.regions");
             for (String regions : regionList) {
                 ProtectedRegion region = getRegion(player.getWorld(), regions);
+                if (region == null) return;
+
                 if (region.contains(BukkitAdapter.asBlockVector(eventTo)) && !region.contains(BukkitAdapter.asBlockVector(eventFrom))) {
                     event.setTo(eventFrom);
-                    Chat.message(player, 5, "&7You are tagged while moving");
+                    Chat.message(player, 5, plugin.getConfig().getString("protected-regions.message"));
                 }
             }
         }
