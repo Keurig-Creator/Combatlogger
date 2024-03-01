@@ -22,11 +22,11 @@ public class FactionsManager {
 
             this.factionsEnabled = true;
 
-            Chat.log("&aEnabled FactionsUUID Support");
+            Chat.log("Enabled FactionsUUID Support");
         } else {
             this.factionsEnabled = false;
 
-            Chat.log("&cFactions not found! Disabling faction support");
+            Chat.log("Factions not found! Disabling faction support");
         }
 
     }

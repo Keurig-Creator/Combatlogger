@@ -46,7 +46,7 @@ public class EcoPunishment extends Punishment {
             amount = Integer.parseInt(numberStr);
 
         } catch (NumberFormatException ignored) {
-            CombatPlugin.getInstance().log("Illegal char in eco punishment");
+            Chat.log("Illegal string in eco punishment");
         }
 
         // deposit money into players account

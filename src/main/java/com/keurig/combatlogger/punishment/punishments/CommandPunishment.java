@@ -15,7 +15,7 @@ public class CommandPunishment extends Punishment {
         final Player player = getPlayer();
 
         String message = args[0];
-        message = message.replace("{player}", player.getName());
+        message = message.replace("%player%", player.getName());
 
         if (player.hasPermission("combatlogger.admin"))
             return;

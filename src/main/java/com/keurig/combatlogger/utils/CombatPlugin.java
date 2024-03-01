@@ -11,8 +11,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.logging.Level;
-
 public class CombatPlugin extends JavaPlugin {
 
     /**
@@ -43,14 +41,6 @@ public class CombatPlugin extends JavaPlugin {
 
     @Getter
     protected static Economy economyAPI = null;
-
-    public void log(String logs) {
-        getLogger().log(Level.INFO, logs);
-    }
-
-    public void log(Level level, String logs) {
-        getLogger().log(level, logs);
-    }
 
     protected boolean setupEconomy() {
 

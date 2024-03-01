@@ -4,6 +4,7 @@ import com.keurig.combatlogger.handler.CombatPlayer;
 import com.keurig.combatlogger.listeners.*;
 import com.keurig.combatlogger.punishment.PunishmentManager;
 import com.keurig.combatlogger.punishment.punishments.EcoPunishment;
+import com.keurig.combatlogger.utils.Chat;
 import com.keurig.combatlogger.utils.CombatPlugin;
 import com.keurig.combatlogger.utils.PlaceholderAPIHook;
 import com.keurig.combatlogger.utils.factions.FactionsManager;
@@ -37,7 +38,7 @@ public class CombatLogger extends CombatPlugin {
         this.factionsEnabled = this.factionsManager.isFactionsEnabled();
 
         if (setupEconomy()) {
-            log("Ecomony integration has been enabled");
+            Chat.log("Ecomony integration has been enabled");
         }
 
         registerEvents();
