@@ -7,10 +7,12 @@ on-combat:
 
   # forces gamemode
   force-gamemode: survival # leave empty to disable
-  force-gamemode-message: '&c7Your gamemode has been updated'
+  force-gamemode-message: '&c7Your gamemode has been updated.'
 
 protected-regions:
-  message: '&7You cannot enter this region while in combat'
+  message: '&7You cannot enter this region while in combat.'
+  # interval between sending messages, so it doesnt spam the users feed.
+  interval: 5
   #  regions:
   #    - 'spawn'
 
