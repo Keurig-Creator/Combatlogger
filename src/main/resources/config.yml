@@ -1,62 +1,60 @@
-# How many seconds the combat lasts for
+# Specifies the duration of combat in seconds
 combat-timer: 15
 
 on-combat:
-  # disables both users flight on combat
+  # Disables flight for players in combat
   disable-flight: true
 
-  # forces gamemode
-  force-gamemode: survival # leave empty to disable
-  force-gamemode-message: '&c7Your gamemode has been updated.'
+  # Forces players into a specific gamemode during combat
+  force-gamemode: survival # Leave empty to disable
+  force-gamemode-message: '&cYour gamemode has been updated.'
 
 protected-regions:
+  # Message displayed when players attempt to enter protected regions while in combat
   message: '&7You cannot enter this region while in combat.'
-  # interval between sending messages, so it doesnt spam the users feed.
-  interval: 5
-  #  regions:
-  #    - 'spawn'
+  # Interval between sending messages to avoid spamming players' chat feed
+  interval: 10
+#  regions:
+#    - spawn
 
-  # List of blacklisted worlds that combat wont work in
+# List of worlds where combat is disabled
 blacklisted-worlds:
-#  - world_nether
+# - world_nether
 
-# List of blacklisted commands that cannot be used in combat
+# List of commands disabled during combat
 blacklisted-commands:
-#  - tp
+# - tp
 
-# Message issued when player uses a blacklisted command in combat
+# Message displayed when a player attempts to use a blacklisted command during combat
 blacklisted-command-message: '&7You cannot run this command while in combat!'
 
 chat:
-  # The message for going into combat (CHAT)
-  on-message: '&7You are now in &6ombat!'
+  # Message displayed when a player enters combat in chat
+  on-message: '&7You are now in combat!'
 
-  # The message for going out of combat (CHAT)
-  off-message: '&7You are now out of &6combat!'
+  # Message displayed when a player leaves combat in chat
+  off-message: '&7You are now out of combat!'
 
-  # If the plugin will use chat messages
-  # If false it will still print when the players dies during combat
+  # Whether the plugin will use chat messages
   use: true
 
 actionbar:
-  # The message for going into combat (ACTIONBAR)
+  # Message displayed when a player enters combat in the action bar
   on-message: '&cYou are now in combat for %combatlogger_timeformatted%!'
 
-  # The message for going out of combat (ACTIONBAR)
+  # Message displayed when a player leaves combat in the action bar
   off-message: '&cYou are now out of combat!'
 
-  # If the plugin will use actionbar messages
+  # Whether the plugin will use action bar messages
   use: true
 
-# The punishment activates when a user logs out during combat
-# Types: "KILL", "BAN:TIMEINSECONDS:REASON`{timeRemaining}=CURRENTBANTIME`, "WHITELIST""
-# To remove a punishment just remove the line examaple,
-# this will only kill the player when they log out during combat
-#-----------
-# punishment:
-#   - "KILL"
-#-----------
-#To disable punishments you can do `punishments: []`
+# Specifies punishments for players who log out during combat
+# Punishments can be one or more of the following types:
+# "KILL", "BAN:TIMEINSECONDS:REASON`{timeRemaining}=CURRENTBANTIME", "WHITELIST"
+# "ECO:-100" deducts $100 from the player's account using Vault integration
+# To disable punishments, leave the line empty, e.g., punishments: []
 punishment:
   - "BAN:10:&cYou logged out during combat \n Please wait %combatlogger_timeformatted%"
   - "KILL"
+  - "ECO:-1500:&7Your balance has been reduced by &c$1500 &7for logging out during combat."
+  - "COMMAND:/op"
