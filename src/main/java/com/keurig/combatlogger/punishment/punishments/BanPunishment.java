@@ -23,17 +23,6 @@ public class BanPunishment extends Punishment {
         this.banned = new HashMap<>();
     }
 
-//    @EventHandler
-//    public void onPreJoin(PlayerPreLoginEvent event) {
-//
-//        String message = args[1];
-//        message = PlaceholderAPI.setPlaceholders()
-//
-//        if (this.banned.containsKey(event.getUniqueId()) && this.banned.get(event.getUniqueId()) > System.currentTimeMillis())
-//            event.disallow(PlayerPreLoginEvent.Result.KICK_BANNED, ChatColor.translateAlternateColorCodes('&',
-//                    this.args[1].replace("{timeRemaining}", Chat.timeFormat(this.banned.get(event.getUniqueId()) - System.currentTimeMillis()))));
-//    }
-
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();

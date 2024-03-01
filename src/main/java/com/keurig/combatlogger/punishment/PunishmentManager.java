@@ -1,9 +1,7 @@
 package com.keurig.combatlogger.punishment;
 
 import com.keurig.combatlogger.CombatLogger;
-import com.keurig.combatlogger.punishment.punishments.BanPunishment;
-import com.keurig.combatlogger.punishment.punishments.KillPunishment;
-import com.keurig.combatlogger.punishment.punishments.WhitelistPunishment;
+import com.keurig.combatlogger.punishment.punishments.*;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -32,6 +30,8 @@ public class PunishmentManager {
         registerPunishment(new BanPunishment(), plugin);
         registerPunishment(new KillPunishment());
         registerPunishment(new WhitelistPunishment());
+        registerPunishment(new CommandPunishment());
+        registerPunishment(new EcoPunishment(), plugin);
     }
 
     /**
