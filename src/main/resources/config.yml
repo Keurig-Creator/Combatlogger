@@ -48,13 +48,17 @@ actionbar:
   # Whether the plugin will use action bar messages
   use: true
 
-# Specifies punishments for players who log out during combat
-# Punishments can be one or more of the following types:
-# "KILL", "BAN:TIMEINSECONDS:REASON`{timeRemaining}=CURRENTBANTIME", "WHITELIST"
-# "ECO:-100" deducts $100 from the player's account using Vault integration
-# To disable punishments, leave the line empty, e.g., punishments: []
+# Specifies punishments for players who log out during combat.
+# Punishments can include various types:
+# - "BAN:10:&cYou logged out during combat \n Please wait %combatlogger_timeformatted%": Temporarily bans the player for 10 seconds with a custom reason,
+#   informing them to wait for the specified combat timer duration.
+# - "KILL": Kills the player upon logging out during combat.
+# - "ECO:-1500:&7Your balance has been reduced by &c$1500 &7for logging out during combat.": Deducts $1500 from the player's in-game account
+#   as a penalty for logging out during combat.
+# - "COMMAND:broadcast &c%player% logged out during combat :(": Executes a broadcast command, notifying all players that the specified player
+#   logged out during combat.
 punishment:
   - "BAN:10:&cYou logged out during combat \n Please wait %combatlogger_timeformatted%"
   - "KILL"
-  - "ECO:-1500:&7Your balance has been reduced by &c$1500 &7for logging out during combat."
-  - "COMMAND:/op"
+#  - "ECO:-1500:&7Your balance has been reduced by &c$1500 &7for logging out during combat."
+#  - "COMMAND:broadcast &c%player% logged out during combat :("
