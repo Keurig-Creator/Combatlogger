@@ -3,47 +3,21 @@ package com.keurig.combatlogger;
 import com.keurig.combatlogger.handler.CombatPlayer;
 import com.keurig.combatlogger.listeners.*;
 import com.keurig.combatlogger.punishment.PunishmentManager;
+import com.keurig.combatlogger.punishment.punishments.EcoPunishment;
+import com.keurig.combatlogger.utils.CombatPlugin;
 import com.keurig.combatlogger.utils.PlaceholderAPIHook;
-import com.keurig.combatlogger.utils.factions.FactionsHook;
 import com.keurig.combatlogger.utils.factions.FactionsManager;
-import lombok.Getter;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.List;
 
-public class CombatLogger extends JavaPlugin {
-
-    /**
-     * Get the instance of the CombatLogger.
-     */
-    @Getter
-    private static CombatLogger instance;
-
-    @Getter
-    private CombatPlayer combatPlayer;
-
-    @Getter
-    private PunishmentManager punishmentManager;
-
-    private FactionsManager factionsManager;
-
-    @Getter
-    private static FactionsHook factionsHook;
-
-    @Getter
-    private String nsmVersion;
-
-    @Getter
-    private boolean factionsEnabled;
-
-    @Getter
-    private PlaceholderAPIHook placeholderAPIHook;
+public class CombatLogger extends CombatPlugin {
 
     @Override
     public void onEnable() {
+        super.onEnable();
         instance = this;
 
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
@@ -62,6 +36,10 @@ public class CombatLogger extends JavaPlugin {
         factionsHook = this.factionsManager.getFactionsHook();
         this.factionsEnabled = this.factionsManager.isFactionsEnabled();
 
+        if (setupEconomy()) {
+            log("Ecomony integration has been enabled");
+        }
+
         registerEvents();
         registerConfig();
     }
@@ -69,6 +47,7 @@ public class CombatLogger extends JavaPlugin {
     @Override
     public void onDisable() {
         this.punishmentManager.unregisterPunishments();
+        EcoPunishment.joinMessages.clear();
     }
 
     public void registerEvents() {
@@ -95,14 +74,5 @@ public class CombatLogger extends JavaPlugin {
         }
 
         return message;
-    }
-
-    /**
-     * @param player get the player tagged check.
-     * @return true if user is tagged else false
-     * @deprecated moved api to CombatLoggerAPI.isTagged(Player)
-     */
-    public boolean isTagged(Player player) {
-        return getCombatPlayer().getCombatLogged().containsKey(player.getUniqueId());
     }
 }
