@@ -55,6 +55,7 @@ public class CombatPlayer {
             stopTasks(player);
     }
 
+
     public void addCombat(Player player) {
         if (player.hasPermission("combatlogger.admin"))
             return;
@@ -63,12 +64,10 @@ public class CombatPlayer {
 
         final boolean useChat = this.plugin.getConfig().getBoolean("chat.use");
         final String combatOnChat = plugin.replaceMsg(player, this.plugin.getConfig().getString("chat.on-message"));
-        final String combatOffChat = plugin.replaceMsg(player, this.plugin.getConfig().getString("chat.off-message"));
-
 
         final boolean useActionBar = this.plugin.getConfig().getBoolean("actionbar.use");
         String combatOnActionBar = plugin.replaceMsg(player, this.plugin.getConfig().getString("actionbar.on-message"));
-        final String combatOffActionBar = plugin.replaceMsg(player, this.plugin.getConfig().getString("actionbar.off-message"));
+
 
         final boolean disableFlight = plugin.getConfig().getBoolean("on-combat.disable-flight");
         String forceGamemode = plugin.getConfig().getString("on-combat.force-gamemode");
@@ -117,31 +116,53 @@ public class CombatPlayer {
             }, 0, 0));
         }
 
+        // Store the current time in milliseconds when a player enters combat,
+        // along with the time when they will leave combat based on the combatTimer.
         this.combatLogged.put(player.getUniqueId(), System.currentTimeMillis() + (combatTimer * 1000));
+
+        // Schedule a task to run after 'combatTimer' seconds to check if the player
+        // is still in combat.
         this.taskCombat.put(player.getUniqueId(), Bukkit.getScheduler().runTaskLater(this.plugin, () -> {
+            // Check if the player's ActionBar task exists and cancel it if so.
             if (taskActionBar.containsKey(player.getUniqueId())) {
                 Bukkit.getScheduler().cancelTask(this.taskActionBar.get(player.getUniqueId()));
             }
 
+            // Check if the player is still marked as in combat.
             if (this.combatLogged.containsKey(player.getUniqueId())) {
-                if (useActionBar) {
-                    assert combatOffActionBar != null;
-                    ActionBar.sendActionBar(player, ChatColor.translateAlternateColorCodes('&', combatOffActionBar));
-                }
-
-                if (useChat) {
-                    assert combatOffChat != null;
-                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', combatOffChat));
-                }
-
-                PlayerLeaveCombatEvent leaveCombatEvent = new PlayerLeaveCombatEvent(player);
-                Bukkit.getPluginManager().callEvent(leaveCombatEvent);
-
-                this.combatLogged.remove(player.getUniqueId());
+                removeCombat(player);
             }
 
-        }, 20 * combatTimer).getTaskId());
+        }, 20L * combatTimer).getTaskId());
 
+    }
+
+    public void removeCombat(Player player) {
+        final boolean useChat = this.plugin.getConfig().getBoolean("chat.use");
+        final String combatOffChat = plugin.replaceMsg(player, this.plugin.getConfig().getString("chat.off-message"));
+
+        final boolean useActionBar = this.plugin.getConfig().getBoolean("actionbar.use");
+        final String combatOffActionBar = plugin.replaceMsg(player, this.plugin.getConfig().getString("actionbar.off-message"));
+
+
+        // If configured to do so, send an ActionBar message to the player.
+        if (useActionBar) {
+            assert combatOffActionBar != null; // Ensure combatOffActionBar is not null
+            ActionBar.sendActionBar(player, ChatColor.translateAlternateColorCodes('&', combatOffActionBar));
+        }
+
+        // If configured to do so, send a chat message to the player.
+        if (useChat) {
+            assert combatOffChat != null; // Ensure combatOffChat is not null
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', combatOffChat));
+        }
+
+        // Call a custom event to signify that the player has left combat.
+        PlayerLeaveCombatEvent leaveCombatEvent = new PlayerLeaveCombatEvent(player);
+        Bukkit.getPluginManager().callEvent(leaveCombatEvent);
+
+        // Remove the player from the combat logged list.
+        this.combatLogged.remove(player.getUniqueId());
     }
 
     private void stopTasks(Player player) {
