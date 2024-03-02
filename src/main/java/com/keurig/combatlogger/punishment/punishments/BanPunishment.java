@@ -29,8 +29,8 @@ public class BanPunishment extends Punishment {
 
         if (banned.containsKey(player.getUniqueId()) && banned.get(player.getUniqueId()) > System.currentTimeMillis()) {
             String message = args[1];
-            message = message.replace("%combatlogger_timeformatted%", Chat.timeFormat(this.banned.get(player.getUniqueId()) - System.currentTimeMillis()));
-            message = message.replace("{timeRemaining}", Chat.timeFormat(this.banned.get(player.getUniqueId()) - System.currentTimeMillis()));
+            message = message.replace("%combatlogger_timeformatted%", Chat.timeFormat(this.banned.get(player.getUniqueId()) - System.currentTimeMillis(), true));
+            message = message.replace("{timeRemaining}", Chat.timeFormat(this.banned.get(player.getUniqueId()) - System.currentTimeMillis(), true));
             message = CombatLogger.getInstance().replaceMsg(player, message);
             player.kickPlayer(Chat.color(message));
         }
