@@ -30,6 +30,7 @@ public class CombatLoggerCommand implements CommandExecutor, TabCompleter {
 
             if (type.equalsIgnoreCase("reload") || type.equalsIgnoreCase("rl")) {
                 plugin.reloadConfig();
+                plugin.registerConfig();
 
                 HandlerList.unregisterAll(plugin);
                 CombatLogger.getInstance().registerEvents();
