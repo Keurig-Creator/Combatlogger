@@ -1,33 +1,6 @@
 # Specifies the duration of combat in seconds
 combat-timer: 15
 
-on-combat:
-  # Disables flight for players in combat
-  disable-flight: true
-
-  # Forces players into a specific gamemode during combat
-  force-gamemode: survival # Leave empty to disable
-  force-gamemode-message: '&6Your gamemode has been updated.'
-
-protected-regions:
-  # Message displayed when players attempt to enter protected regions while in combat
-  message: '&fYou cannot enter this region while in &6combat&f.'
-  # Interval between sending messages to avoid spamming players' chat feed
-  interval: 10
-#  regions:
-#    - spawn
-
-# List of worlds where combat is disabled
-blacklisted-worlds:
-# - world_nether
-
-# List of commands disabled during combat
-blacklisted-commands:
-# - tp
-
-# Message displayed when a player attempts to use a blacklisted command during combat
-blacklisted-command-message: '&fYou cannot &crun&f this command while in &6combat&f!'
-
 chat:
   # Message displayed when a player enters combat in chat
   on-message: '&fYou are now in &6combat&f!'
@@ -62,3 +35,30 @@ punishment:
   - "KILL"
 #  - "ECO:-1500:&fYour balance has been reduced by &6$1500 &7for logging out during combat."
 #  - "COMMAND:broadcast &6%player% &flogged out during combat :("
+
+on-combat:
+  # Disables flight for players in combat
+  disable-flight: true
+
+  # Forces players into a specific gamemode during combat
+  force-gamemode: survival # Leave empty to disable
+  force-gamemode-message: '&6Your gamemode has been updated.'
+
+protected-regions:
+  # Message displayed when players attempt to enter protected regions while in combat
+  message: '&fYou cannot enter this region while in &6combat&f.'
+  # Interval between sending messages to avoid spamming players' chat feed
+  interval: 10
+#  regions:
+#    - spawn
+
+# List of worlds where combat is disabled
+blacklisted-worlds:
+# - world_nether
+
+# List of commands disabled during combat
+blacklisted-commands:
+# - tp
+
+# Message displayed when a player attempts to use a blacklisted command during combat
+blacklisted-command-message: '&fYou cannot &crun&f this command while in &6combat&f!'
