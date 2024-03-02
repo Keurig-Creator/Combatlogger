@@ -26,7 +26,7 @@ public class PunishmentManager {
         initializeDefault();
     }
 
-    private void initializeDefault() {
+    public void initializeDefault() {
         registerPunishment(new BanPunishment(), plugin);
         registerPunishment(new KillPunishment());
         registerPunishment(new WhitelistPunishment());
