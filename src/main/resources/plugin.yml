@@ -11,3 +11,16 @@ softdepend:
 permissions:
   combatlogger.admin:
     default: false
+    description: Allows bypassing combat tag restrictions.
+  combatlogger.command:
+    default: false
+    description: Allows usage of the default command to reload the plugin's configuration.
+
+commands:
+  combatlogger:
+    description: Main command for managing CombatLogger plugin.
+    aliases:
+      - cl
+      - comblog
+    permissions:
+      - combatlogger.command
