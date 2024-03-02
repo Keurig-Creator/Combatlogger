@@ -60,5 +60,5 @@ actionbar:
 punishment:
   - "BAN:10:&fYou logged out during &6combat &7\n Please wait %combatlogger_timeformatted%"
   - "KILL"
-#  - "ECO:-1500:&7Your balance has been reduced by &c$1500 &7for logging out during combat."
-#  - "COMMAND:broadcast &c%player% logged out during combat :("
+#  - "ECO:-1500:&fYour balance has been reduced by &6$1500 &7for logging out during combat."
+#  - "COMMAND:broadcast &6%player% &flogged out during combat :("
