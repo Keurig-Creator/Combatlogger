@@ -19,8 +19,7 @@ public class CommandPunishment extends Punishment {
 
         if (player.hasPermission("combatlogger.admin"))
             return;
-
-
+        
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), message);
     }
 }
