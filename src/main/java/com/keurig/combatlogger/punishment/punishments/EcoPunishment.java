@@ -16,7 +16,7 @@ public class EcoPunishment extends Punishment {
     public static HashMap<UUID, String> joinMessages = new HashMap<>();
 
     public EcoPunishment() {
-        super("ECO", 1);
+        super("ECO", 2);
     }
 
     @EventHandler
