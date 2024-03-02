@@ -70,9 +70,8 @@ public class CombatPlayer {
 
 
         final boolean disableFlight = plugin.getConfig().getBoolean("on-combat.disable-flight");
-        String forceGamemode = plugin.getConfig().getString("on-combat.force-gamemode");
 
-        assert forceGamemode != null;
+        String forceGamemode = plugin.getConfig().getString("on-combat.force-gamemode");
 
         if (isTagged(player)) {
             stopTasks(player);
@@ -91,13 +90,15 @@ public class CombatPlayer {
             player.setAllowFlight(false);
         }
 
-        if (!forceGamemode.isBlank() && !forceGamemode.isEmpty()) {
+        if (forceGamemode != null && !forceGamemode.isBlank()) {
+
             GameMode gameMode = GameMode.valueOf(forceGamemode.toUpperCase(Locale.ROOT));
 
             if (!player.getGameMode().equals(gameMode)) {
                 player.setGameMode(gameMode);
-                player.sendMessage("gamemode changed to " + forceGamemode);
+                Chat.message(player, plugin.getConfig().getString("on-combat.force-gamemode-message"));
             }
+
         }
 
         if (disableFlight) {
