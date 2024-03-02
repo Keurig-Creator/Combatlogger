@@ -46,12 +46,16 @@ public class Chat {
         long minute = (millis / (1000 * 60)) % 60;
 
         // Check if milliseconds are greater than or equal to 10
-        if ((millis % 1000) >= 10 && second == 1 && minute == 0) {
+        if (minute >= 1 || (millis % 1000) >= 10 && second >= 1) {
             second++; // Increment seconds if milliseconds are greater than or equal to 10 and no minutes or seconds are left
         }
+//        if ((millis % 1000) >= 10 && second >= 1 && minute >= 1) {
+//            second++; // Increment seconds if milliseconds are greater than or equal to 10 and no minutes or seconds are left
+//        }
 
         if (minute > 0) {
             return String.format("%dm %ds", minute, second);
+
         } else if (second > 0) {
             return String.format("%ds", second);
         } else {
@@ -61,5 +65,7 @@ public class Chat {
                 return String.format("%dms", millis);
             }
         }
+
+
     }
 }
