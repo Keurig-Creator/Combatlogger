@@ -1,5 +1,6 @@
 package com.keurig.combatlogger;
 
+import com.keurig.combatlogger.command.CombatLoggerCommand;
 import com.keurig.combatlogger.handler.CombatPlayer;
 import com.keurig.combatlogger.listeners.*;
 import com.keurig.combatlogger.punishment.PunishmentManager;
@@ -43,6 +44,8 @@ public class CombatLogger extends CombatPlugin {
 
         registerEvents();
         registerConfig();
+
+        getCommand("combatlogger").setExecutor(new CombatLoggerCommand());
     }
 
     @Override

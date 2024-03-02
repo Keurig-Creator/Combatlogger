@@ -25,8 +25,6 @@ public class FactionsManager {
             Chat.log("Enabled FactionsUUID Support");
         } else {
             this.factionsEnabled = false;
-
-            Chat.log("Factions not found! Disabling faction support");
         }
 
     }

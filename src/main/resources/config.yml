@@ -7,11 +7,11 @@ on-combat:
 
   # Forces players into a specific gamemode during combat
   force-gamemode: survival # Leave empty to disable
-  force-gamemode-message: '&cYour gamemode has been updated.'
+  force-gamemode-message: '&6Your gamemode has been updated.'
 
 protected-regions:
   # Message displayed when players attempt to enter protected regions while in combat
-  message: '&7You cannot enter this region while in combat.'
+  message: '&fYou cannot enter this region while in &6combat&f.'
   # Interval between sending messages to avoid spamming players' chat feed
   interval: 10
 #  regions:
@@ -26,24 +26,24 @@ blacklisted-commands:
 # - tp
 
 # Message displayed when a player attempts to use a blacklisted command during combat
-blacklisted-command-message: '&7You cannot run this command while in combat!'
+blacklisted-command-message: '&fYou cannot &crun&f this command while in &6combat&f!'
 
 chat:
   # Message displayed when a player enters combat in chat
-  on-message: '&7You are now in combat!'
+  on-message: '&fYou are now in &6combat&f!'
 
   # Message displayed when a player leaves combat in chat
-  off-message: '&7You are now out of combat!'
+  off-message: '&fYou are now out of &6combat&f!'
 
   # Whether the plugin will use chat messages
   use: true
 
 actionbar:
   # Message displayed when a player enters combat in the action bar
-  on-message: '&cYou are now in combat for %combatlogger_timeformatted%!'
+  on-message: '&6You are now in &fcombat &7for %combatlogger_timeformatted%!'
 
   # Message displayed when a player leaves combat in the action bar
-  off-message: '&cYou are now out of combat!'
+  off-message: '&6You are now out of &fcombat&f!'
 
   # Whether the plugin will use action bar messages
   use: true
@@ -58,7 +58,7 @@ actionbar:
 # - "COMMAND:broadcast &c%player% logged out during combat :(": Executes a broadcast command, notifying all players that the specified player
 #   logged out during combat.
 punishment:
-  - "BAN:10:&cYou logged out during combat \n Please wait %combatlogger_timeformatted%"
+  - "BAN:10:&fYou logged out during &6combat &7\n Please wait %combatlogger_timeformatted%"
   - "KILL"
 #  - "ECO:-1500:&7Your balance has been reduced by &c$1500 &7for logging out during combat."
 #  - "COMMAND:broadcast &c%player% logged out during combat :("
