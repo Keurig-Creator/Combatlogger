@@ -1,12 +1,12 @@
 package com.keurig.combatlogger.utils;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 import java.util.UUID;
+import java.util.logging.Level;
 
 public class Chat {
 
@@ -30,23 +30,36 @@ public class Chat {
     }
 
     public static void message(CommandSender sender, String... messages) {
-        Arrays.stream(messages).forEach(sender::sendMessage);
+        Arrays.stream(messages).forEach(s -> sender.sendMessage(color(s)));
     }
 
     public static void log(String message) {
-        Bukkit.getConsoleSender().sendMessage(color(message));
+        CombatPlugin.getInstance().getLogger().log(Level.INFO, color(message));
     }
 
-    public static String timeFormat(long milis) {
+    public static String timeFormat(long millis) {
+        return timeFormat(millis, false);
+    }
 
-        long second = (milis / 1000) % 60;
-        long minute = (milis / (1000 * 60)) % 60;
+    public static String timeFormat(long millis, boolean round) {
+        long second = (millis / 1000) % 60;
+        long minute = (millis / (1000 * 60)) % 60;
+
+        // Check if milliseconds are greater than or equal to 10
+        if ((millis % 1000) >= 10 && second == 1 && minute == 0) {
+            second++; // Increment seconds if milliseconds are greater than or equal to 10 and no minutes or seconds are left
+        }
 
         if (minute > 0) {
             return String.format("%dm %ds", minute, second);
         } else if (second > 0) {
             return String.format("%ds", second);
-        } else
-            return String.format("%dms", milis);
+        } else {
+            if (round) {
+                return "0s";
+            } else {
+                return String.format("%dms", millis);
+            }
+        }
     }
 }
