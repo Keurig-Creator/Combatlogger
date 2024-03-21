@@ -32,6 +32,8 @@ public class CombatLoggerCommand implements CommandExecutor, TabCompleter {
                 plugin.reloadConfig();
                 plugin.registerConfig();
 
+                plugin.getPunishmentManager().getConfig().reloadConfig();
+
                 HandlerList.unregisterAll(plugin);
                 CombatLogger.getInstance().registerEvents();
 
