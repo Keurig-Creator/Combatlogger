@@ -1,5 +1,7 @@
 package com.keurig.combatlogger.utils;
 
+import org.bukkit.Bukkit;
+
 import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -21,6 +23,10 @@ public class TempHashMap<K, V> extends HashMap<K, V> {
 
     // Schedule removal of key after ttl
     private void scheduleRemoval(final K key) {
+        Bukkit.getScheduler().runTaskLater(CombatPlugin.getInstance(), () -> {
+            remove(key);
+        }, ttl);
+
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
