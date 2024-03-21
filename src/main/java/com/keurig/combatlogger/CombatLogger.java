@@ -3,6 +3,7 @@ package com.keurig.combatlogger;
 import com.keurig.combatlogger.command.CombatLoggerCommand;
 import com.keurig.combatlogger.handler.CombatPlayer;
 import com.keurig.combatlogger.listeners.*;
+import com.keurig.combatlogger.punishment.PunishmentConfig;
 import com.keurig.combatlogger.punishment.PunishmentManager;
 import com.keurig.combatlogger.punishment.punishments.EcoPunishment;
 import com.keurig.combatlogger.utils.Chat;
@@ -13,6 +14,7 @@ import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import java.io.File;
 import java.util.List;
 
 public class CombatLogger extends CombatPlugin {
@@ -28,6 +30,9 @@ public class CombatLogger extends CombatPlugin {
         }
 
         this.combatPlayer = new CombatPlayer(this);
+
+        // load before punishment manager
+        setupPermissions();
         this.punishmentManager = new PunishmentManager();
 
         this.nsmVersion = Bukkit.getServer().getClass().getPackage().getName();
@@ -46,6 +51,9 @@ public class CombatLogger extends CombatPlugin {
         registerConfig();
 
         getCommand("combatlogger").setExecutor(new CombatLoggerCommand());
+
+
+        PunishmentConfig punishmentConfig = new PunishmentConfig(this, new File(getDataFolder(), "punishments.yml"));
     }
 
     @Override
