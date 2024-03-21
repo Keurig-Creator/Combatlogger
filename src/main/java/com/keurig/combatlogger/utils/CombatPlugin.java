@@ -7,6 +7,7 @@ import com.keurig.combatlogger.utils.factions.FactionsHook;
 import com.keurig.combatlogger.utils.factions.FactionsManager;
 import lombok.Getter;
 import net.milkbowl.vault.economy.Economy;
+import net.milkbowl.vault.permission.Permission;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -42,6 +43,9 @@ public class CombatPlugin extends JavaPlugin {
     @Getter
     protected static Economy economyAPI = null;
 
+    @Getter
+    protected Permission permissionAPI = null;
+
     protected boolean setupEconomy() {
 
         if (getServer().getPluginManager().getPlugin("Vault") == null) {
@@ -53,6 +57,17 @@ public class CombatPlugin extends JavaPlugin {
         }
         economyAPI = rsp.getProvider();
         return true;
+    }
+
+    protected boolean setupPermissions() {
+
+        try {
+            RegisteredServiceProvider<Permission> rsp = getServer().getServicesManager().getRegistration(Permission.class);
+            permissionAPI = rsp.getProvider();
+        } catch (NoClassDefFoundError e) {
+            return false;
+        }
+        return permissionAPI != null;
     }
 
     /**
