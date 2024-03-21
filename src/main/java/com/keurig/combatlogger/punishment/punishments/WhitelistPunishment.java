@@ -9,7 +9,7 @@ public class WhitelistPunishment extends Punishment {
     }
 
     @Override
-    public void onQuit(String label, String[] args) {
+    public void onQuit(String label) {
         if (getPlayer().hasPermission("combatlogger.admin"))
             return;
 

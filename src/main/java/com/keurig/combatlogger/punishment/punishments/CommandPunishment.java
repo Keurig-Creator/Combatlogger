@@ -11,15 +11,16 @@ public class CommandPunishment extends Punishment {
     }
 
     @Override
-    public void onQuit(String label, String[] args) {
+    public void onQuit(String label) {
         final Player player = getPlayer();
 
-        String message = args[0];
+        String message = getArgs().get("command").toString();
+
         message = message.replace("%player%", player.getName());
 
         if (player.hasPermission("combatlogger.admin"))
             return;
-        
+
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), message);
     }
 }

@@ -6,6 +6,9 @@ import lombok.ToString;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Getter
 @Setter
 @ToString
@@ -26,6 +29,13 @@ public abstract class Punishment implements Listener {
      */
     private final int numberArgs;
 
+    /**
+     * Get the punishment config
+     */
+    private PunishmentConfig punishmentConfig;
+
+    private Map<String, Object> args;
+
     public Punishment(String name) {
         this(name, 0);
     }
@@ -33,13 +43,18 @@ public abstract class Punishment implements Listener {
     public Punishment(String name, int numberArgs) {
         this.name = name;
         this.numberArgs = numberArgs;
+        this.args = new HashMap<>();
     }
 
     /**
      * Runs when the player quits the server during combat.
      *
      * @param label the name of the punishment
-     * @param args  the arguments used
      */
-    public abstract void onQuit(String label, String[] args);
+    public abstract void onQuit(String label);
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

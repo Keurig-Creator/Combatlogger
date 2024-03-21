@@ -33,13 +33,14 @@ public class EcoPunishment extends Punishment {
     }
 
     @Override
-    public void onQuit(String label, String[] args) {
+    public void onQuit(String label) {
 
-        if (!CombatPlugin.getEconomyAPI().isEnabled()) {
+        if (CombatPlugin.getEconomyAPI() == null) {
             return;
         }
 
-        String numberStr = args[0];
+        String numberStr = getArgs().get("amount").toString();
+
         int amount = 0;
 
         try {
@@ -56,8 +57,6 @@ public class EcoPunishment extends Punishment {
             CombatPlugin.getEconomyAPI().withdrawPlayer(getPlayer(), Math.abs(amount));
         }
 
-        if (args.length > 1) {
-            joinMessages.put(getPlayer().getUniqueId(), args[1]);
-        }
+        joinMessages.put(getPlayer().getUniqueId(), (String) getArgs().get("message"));
     }
 }
