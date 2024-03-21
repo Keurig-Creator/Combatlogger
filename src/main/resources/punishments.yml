@@ -1,0 +1,32 @@
+# Punishment Configurations
+# Specifies punishments for players who log out during combat.
+# The 'default' section contains punishments that apply to all players unless overridden by specific permissions.
+# Each punishment type can have its own set of arguments, such as duration for bans, amount for economy deductions, and messages to display.
+default:
+  ban: # Ban punishment for logging out during combat
+    seconds: 15
+    message: "&fYou logged out during &6combat &7\n Please wait %combatlogger_timeformatted%"
+  kill:
+  eco: # Economy deduction punishment for logging out during combat
+    amount: -1500
+    message: "&fYour balance has been reduced by &6$1500 &7for logging out during combat."
+#  command: "broadcast &6%player% &flogged out during combat :("
+
+# *Must have a permission plugin to work*
+permissions:
+  # Example permission 'owner' using only economy deduction and use the different ban message
+  owner:
+    permission: combatlogger.owner
+    punishments:
+      ban:
+        seconds: 10
+        message: "&4You logged out during &6combat &7\n Please wait %combatlogger_timeformatted%"
+        eco:
+          amount: -1500
+          message: "&fYour balance has been reduced by &6$1500 &7for logging out during combat."
+        command: "broadcast &6%player% &flogged out during combat :("
+  express:
+    permission: combatlogger.express
+    punishments:
+      - kill
+      - command
