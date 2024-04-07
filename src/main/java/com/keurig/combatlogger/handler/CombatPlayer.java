@@ -125,7 +125,6 @@ public class CombatPlayer {
 
                 int timeRemaining = (int) (CombatLoggerAPI.getRemainingTime(player));
 
-                Chat.log(String.valueOf(timeRemaining));
                 if (intervals.contains(timeRemaining)) {
                     Chat.message(player, finalIntervalMessage);
                 }
