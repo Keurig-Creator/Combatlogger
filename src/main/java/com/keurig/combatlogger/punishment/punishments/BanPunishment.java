@@ -23,12 +23,15 @@ public class BanPunishment extends Punishment {
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
 
+        Chat.log("PLayer tried joining");
+
         BanInfo banInfo = BanInfo.get(player.getUniqueId());
         if (banInfo == null) {
             return;
         }
 
         if (banInfo.isBanned()) {
+            event.setJoinMessage(Chat.color(banInfo.getMessage()));
             player.kickPlayer(Chat.color(banInfo.getMessage()));
         }
 
