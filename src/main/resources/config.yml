@@ -2,24 +2,28 @@
 combat-timer: 15
 
 chat:
-  # Message displayed when a player enters combat in chat
-  on-message: '&fYou are now in &6combat&f!'
-
-  # Message displayed when a player leaves combat in chat
-  off-message: '&fYou are now out of &6combat&f!'
-
   # Whether the plugin will use chat messages
   use: true
 
+  # Used to display interval chat messages
+  interval:
+    # Example will display two chat messages at 10 seconds and 5 seconds
+    seconds: [ 10, 5 ]
+    message: '&fYou are now in &6combat &ffor &6%combatlogger_timeformatted%!'
+
+  # Message displayed when a player enters combat in chat
+  on-message: '&fYou are now in &6combat&f!'
+  # Message displayed when a player leaves combat in chat
+  off-message: '&fYou are now out of &6combat&f!'
+
 actionbar:
-  # Message displayed when a player enters combat in the action bar
-  on-message: '&6You are now in &fcombat &7for %combatlogger_timeformatted%!'
-
-  # Message displayed when a player leaves combat in the action bar
-  off-message: '&6You are now out of &fcombat&f!'
-
   # Whether the plugin will use action bar messages
   use: true
+  interval: 0
+  # Message displayed when a player enters combat in the action bar
+  on-message: '&6You are now in &fcombat &7for %combatlogger_timeformatted%!'
+  # Message displayed when a player leaves combat in the action bar
+  off-message: '&6You are now out of &fcombat&f!'
 
 on-combat:
   # Disables flight for players in combat
