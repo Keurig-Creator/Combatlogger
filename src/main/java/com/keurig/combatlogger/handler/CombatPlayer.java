@@ -113,20 +113,24 @@ public class CombatPlayer {
 
         if (!intervals.isEmpty()) {
             this.taskChat.put(player.getUniqueId(), Bukkit.getScheduler().scheduleSyncRepeatingTask(this.plugin, () -> {
-
                 String finalIntervalMessage = intervalMessage;
 
-                String time = Chat.timeFormat(CombatLoggerAPI.timeRemaining(player) - 1, true);
+                long timeRemainingMillis = CombatLoggerAPI.timeRemaining(player); // Adjusted for the delay
 
-                finalIntervalMessage = finalIntervalMessage.replace("{timeRemaining}", time);
-                finalIntervalMessage = finalIntervalMessage.replace("%combatlogger_timeformatted%", time);
-                finalIntervalMessage = finalIntervalMessage.replace("%combatlogger_time%", time);
+                if (timeRemainingMillis > 0) { // Ensure non-negative time remaining
+                    String time = Chat.timeFormat(timeRemainingMillis, true);
 
+                    finalIntervalMessage = finalIntervalMessage.replace("{timeRemaining}", time);
+                    finalIntervalMessage = finalIntervalMessage.replace("%combatlogger_timeformatted%", time);
+                    finalIntervalMessage = finalIntervalMessage.replace("%combatlogger_time%", time);
 
-                int timeRemaining = (int) (CombatLoggerAPI.getRemainingTime(player));
-
-                if (intervals.contains(timeRemaining)) {
-                    Chat.message(player, finalIntervalMessage);
+                    // Check if the time remaining matches any of the specified intervals
+                    for (int interval : intervals) {
+                        if ((timeRemainingMillis / 1000) == interval) {
+                            Chat.message(player, finalIntervalMessage);
+                            break; // Exit loop after sending the message once
+                        }
+                    }
                 }
             }, 0, 20));
         }

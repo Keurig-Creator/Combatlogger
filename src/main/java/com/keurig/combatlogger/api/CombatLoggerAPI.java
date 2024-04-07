@@ -49,6 +49,13 @@ public class CombatLoggerAPI {
     }
 
     public static long getRemainingTime(Player player) {
-        return (timeRemaining(player) / 1000);
+        long remainingTimeMillis = timeRemaining(player);
+        long remainingSeconds = remainingTimeMillis / 1000;
+
+        if (remainingTimeMillis % 1000 >= 500) {
+            remainingSeconds++; // Round up if milliseconds are 500 or more
+        }
+
+        return Math.max(0, remainingSeconds);
     }
 }
