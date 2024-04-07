@@ -22,6 +22,7 @@ public class CombatPlayer {
     private final Map<UUID, Long> combatLogged;
     private final Set<UUID> players;
     private final Map<UUID, Integer> taskActionBar;
+    private final Map<UUID, Integer> taskChat;
     private final Map<UUID, Integer> taskCombat;
 
     public CombatPlayer(CombatLogger plugin) {
@@ -30,6 +31,7 @@ public class CombatPlayer {
         this.combatLogged = new HashMap<>();
 
         this.taskActionBar = new HashMap<>();
+        this.taskChat = new HashMap<>();
         this.taskCombat = new HashMap<>();
         this.players = new HashSet<>();
 
@@ -67,6 +69,9 @@ public class CombatPlayer {
 
         final boolean useActionBar = this.plugin.getConfig().getBoolean("actionbar.use");
         String combatOnActionBar = plugin.replaceMsg(player, this.plugin.getConfig().getString("actionbar.on-message"));
+
+        String intervalMessage = plugin.getConfig().getString("chat.interval.message");
+        List<Integer> intervals = plugin.getConfig().getIntegerList("chat.interval.seconds");
 
 
         final boolean disableFlight = plugin.getConfig().getBoolean("on-combat.disable-flight");
@@ -106,6 +111,28 @@ public class CombatPlayer {
             player.setAllowFlight(false);
         }
 
+        if (!intervals.isEmpty()) {
+            this.taskChat.put(player.getUniqueId(), Bukkit.getScheduler().scheduleSyncRepeatingTask(this.plugin, () -> {
+
+                String finalIntervalMessage = intervalMessage;
+
+                String time = Chat.timeFormat(CombatLoggerAPI.timeRemaining(player) - 1, true);
+
+                finalIntervalMessage = finalIntervalMessage.replace("{timeRemaining}", time);
+                finalIntervalMessage = finalIntervalMessage.replace("%combatlogger_timeformatted%", time);
+                finalIntervalMessage = finalIntervalMessage.replace("%combatlogger_time%", time);
+
+
+                int timeRemaining = (int) (CombatLoggerAPI.getRemainingTime(player));
+
+                Chat.log(String.valueOf(timeRemaining));
+                if (intervals.contains(timeRemaining)) {
+                    Chat.message(player, finalIntervalMessage);
+                }
+            }, 0, 20));
+        }
+
+
         if (useActionBar) {
             this.taskActionBar.put(player.getUniqueId(), Bukkit.getScheduler().scheduleSyncRepeatingTask(this.plugin, () -> {
                 String finalCombatOnActionBar = combatOnActionBar;
@@ -127,6 +154,10 @@ public class CombatPlayer {
             // Check if the player's ActionBar task exists and cancel it if so.
             if (taskActionBar.containsKey(player.getUniqueId())) {
                 Bukkit.getScheduler().cancelTask(this.taskActionBar.get(player.getUniqueId()));
+            }
+
+            if (taskChat.containsKey(player.getUniqueId())) {
+                Bukkit.getScheduler().cancelTask(this.taskChat.get(player.getUniqueId()));
             }
 
             // Check if the player is still marked as in combat.
@@ -172,6 +203,9 @@ public class CombatPlayer {
 
         if (taskCombat.containsKey(player.getUniqueId()))
             Bukkit.getScheduler().cancelTask(this.taskCombat.get(player.getUniqueId()));
+
+        if (taskChat.containsKey(player.getUniqueId()))
+            Bukkit.getScheduler().cancelTask(this.taskChat.get(player.getUniqueId()));
     }
 
     private boolean isTagged(Player player) {
