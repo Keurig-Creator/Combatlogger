@@ -115,21 +115,29 @@ public class CombatPlayer {
             this.taskChat.put(player.getUniqueId(), Bukkit.getScheduler().scheduleSyncRepeatingTask(this.plugin, () -> {
                 String finalIntervalMessage = intervalMessage;
 
-                long timeRemainingMillis = CombatLoggerAPI.timeRemaining(player); // Adjusted for the delay
+                long timeRemainingMillis = CombatLoggerAPI.timeRemaining(player);
 
                 if (timeRemainingMillis > 0) { // Ensure non-negative time remaining
-                    String time = Chat.timeFormat(timeRemainingMillis, true);
+                    String time = Chat.timeFormat(timeRemainingMillis, false);
 
                     finalIntervalMessage = finalIntervalMessage.replace("{timeRemaining}", time);
                     finalIntervalMessage = finalIntervalMessage.replace("%combatlogger_timeformatted%", time);
                     finalIntervalMessage = finalIntervalMessage.replace("%combatlogger_time%", time);
 
-                    // Check if the time remaining matches any of the specified intervals
-                    for (int interval : intervals) {
-                        if ((timeRemainingMillis / 1000) == interval) {
-                            Chat.message(player, finalIntervalMessage);
-                            break; // Exit loop after sending the message once
-                        }
+                    int timeRemainingSeconds = (int) (timeRemainingMillis / 1000);
+
+                    // Get the Bukkit server version
+                    String bukkitVersion = Bukkit.getVersion();
+
+                    // For some reason locally stored number is version dependant and this fixes it
+                    // and not sure why
+                    boolean isOldVersion = bukkitVersion.contains("1.8") || bukkitVersion.contains("1.7");
+                    if (!isOldVersion) {
+                        timeRemainingSeconds++; // Adjust for older versions
+                    }
+
+                    if (intervals.contains(timeRemainingSeconds)) {
+                        Chat.message(player, finalIntervalMessage);
                     }
                 }
             }, 0, 20));
