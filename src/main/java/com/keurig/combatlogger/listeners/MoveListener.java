@@ -3,16 +3,20 @@ package com.keurig.combatlogger.listeners;
 import com.keurig.combatlogger.CombatLogger;
 import com.keurig.combatlogger.api.CombatLoggerAPI;
 import com.keurig.combatlogger.utils.Chat;
+import com.keurig.combatlogger.utils.RegionUtil;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -20,10 +24,14 @@ public class MoveListener implements Listener {
 
     private final CombatLogger plugin = CombatLogger.getInstance();
 
+    private final HashMap<Player, Block> modifiedBlocks = new HashMap<>();
+
     @EventHandler
     public void onMove(PlayerMoveEvent event) {
 
         Player player = event.getPlayer();
+
+
         if (CombatLoggerAPI.isTagged(player)) {
             Location eventTo = event.getTo();
             Location eventFrom = event.getFrom();
@@ -50,6 +58,14 @@ public class MoveListener implements Listener {
                 }
             }
         }
+    }
+
+    @EventHandler
+    public void onInteract(PlayerInteractEvent event) {
+        Player player = event.getPlayer();
+
+        RegionUtil.handleClaimGlassBuffer(WorldGuard.getInstance().getPlatform().getRegionContainer().get(BukkitAdapter.adapt(player.getWorld())).getRegion("spawn"), player, player.getLocation());
+//        event.setCancelled(true);
     }
 
     public ProtectedRegion getRegion(World world, String regionName) {
