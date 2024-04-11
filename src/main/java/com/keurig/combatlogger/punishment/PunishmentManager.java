@@ -8,9 +8,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
+@Getter
 public class PunishmentManager {
 
     private static CombatLogger plugin;
@@ -20,6 +20,7 @@ public class PunishmentManager {
 
     @Getter
     private static List<Punishment> punishments;
+    public Map<UUID, Punishment> lastPunishment = new HashMap<>();
 
     public PunishmentManager() {
         plugin = CombatLogger.getInstance();
