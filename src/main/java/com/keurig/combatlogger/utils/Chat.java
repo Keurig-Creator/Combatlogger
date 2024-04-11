@@ -41,31 +41,29 @@ public class Chat {
         return timeFormat(millis, false);
     }
 
+
     public static String timeFormat(long millis, boolean round) {
         long second = (millis / 1000) % 60;
         long minute = (millis / (1000 * 60)) % 60;
 
-        // Check if milliseconds are greater than or equal to 10
-        if (minute >= 1 || (millis % 1000) >= 10 && second >= 1) {
-            second++; // Increment seconds if milliseconds are greater than or equal to 10 and no minutes or seconds are left
+        if ((millis % 1000) >= 10 && second > 0) {
+            second++; // Increment seconds if milliseconds are greater than or equal to 10 and seconds are greater than 0
         }
-//        if ((millis % 1000) >= 10 && second >= 1 && minute >= 1) {
-//            second++; // Increment seconds if milliseconds are greater than or equal to 10 and no minutes or seconds are left
-//        }
+
+        if (second >= 0.6 && second < 1) { // Rounding up if second is above 0.6
+            second = 1;
+        }
 
         if (minute > 0) {
             return String.format("%dm %ds", minute, second);
-
         } else if (second > 0) {
             return String.format("%ds", second);
         } else {
             if (round) {
-                return "0s";
+                return "1s"; // Change 0s to 1s if rounding and seconds are 0
             } else {
                 return String.format("%dms", millis);
             }
         }
-
-
     }
 }

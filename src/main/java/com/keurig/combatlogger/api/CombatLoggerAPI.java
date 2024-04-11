@@ -47,4 +47,15 @@ public class CombatLoggerAPI {
         final Map<UUID, Long> combatLogged = CombatLogger.getInstance().getCombatPlayer().getCombatLogged();
         return isTagged(player) ? combatLogged.get(player.getUniqueId()) - System.currentTimeMillis() : 0;
     }
+
+    public static long getRemainingTime(Player player) {
+        long remainingTimeMillis = timeRemaining(player);
+        long remainingSeconds = remainingTimeMillis / 1000;
+
+        if (remainingTimeMillis % 1000 >= 500) {
+            remainingSeconds++; // Round up if milliseconds are 500 or more
+        }
+
+        return Math.max(0, remainingSeconds);
+    }
 }

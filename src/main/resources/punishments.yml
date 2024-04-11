@@ -28,5 +28,5 @@ permissions:
   express:
     permission: combatlogger.express
     punishments:
-      - kill
-      - command
+      kill:
+      command: "broadcast &6%player% &flogged out during combat :("
