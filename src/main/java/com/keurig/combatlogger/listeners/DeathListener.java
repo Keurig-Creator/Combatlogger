@@ -14,15 +14,23 @@ public class DeathListener implements Listener {
 
 	@EventHandler
 	public void onDeath(PlayerDeathEvent event) {
-		final Player player = event.getEntity();
+		Player player = event.getEntity();
+		CombatPlayer combatPlayer = this.plugin.getCombatPlayer();
 
-		final CombatPlayer combatPlayer = this.plugin.getCombatPlayer();
-		combatPlayer.removePlayer(player);
-		
-		final String combatOffChat = this.plugin.getConfig().getString("chat.off-message");
+		if (player.getKiller() == player) {
+			return;
+		}
 
-		assert combatOffChat != null;
-		player.sendMessage(ChatColor.translateAlternateColorCodes('&', combatOffChat));
+		if (player.getKiller() instanceof Player) {
+			combatPlayer.removePlayer(player);
+
+			String combatOffChat = this.plugin.getConfig().getString("chat.off-message");
+
+			if (combatOffChat != null) {
+				player.sendMessage(ChatColor.translateAlternateColorCodes('&', combatOffChat));
+			}
+		} else if (player.getKiller() != null && !player.getKiller().getType().isSpawnable()) {
+
+        	}
 	}
-
 }
