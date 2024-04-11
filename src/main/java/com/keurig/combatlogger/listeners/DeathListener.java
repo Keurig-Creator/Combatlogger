@@ -30,8 +30,7 @@ public class DeathListener implements Listener {
 				player.sendMessage(ChatColor.translateAlternateColorCodes('&', combatOffChat));
 			}
 		} else if (player.getKiller() != null && !player.getKiller().getType().isSpawnable()) {
-			
-		}
-	}
+
+        	}
 	}
 }
