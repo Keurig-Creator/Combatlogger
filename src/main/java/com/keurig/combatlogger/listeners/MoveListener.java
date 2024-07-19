@@ -45,7 +45,7 @@ public class MoveListener implements Listener {
                 if (region == null) return;
 
                 if (region.contains(BukkitAdapter.asBlockVector(eventTo)) && !region.contains(BukkitAdapter.asBlockVector(eventFrom))) {
-                    event.setTo(eventFrom);
+                    event.setCancelled(true);
                     Chat.message(player, 5, plugin.getConfig().getString("protected-regions.message"));
                 }
             }
