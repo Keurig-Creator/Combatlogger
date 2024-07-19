@@ -62,7 +62,7 @@ public class Chat {
             if (round) {
                 return "1s"; // Change 0s to 1s if rounding and seconds are 0
             } else {
-                return String.format("%dms", millis);
+                return String.format("%ds", millis);
             }
         }
     }

@@ -68,7 +68,6 @@ public class CombatPlayer {
         final String combatOnChat = plugin.replaceMsg(player, this.plugin.getConfig().getString("chat.on-message"));
 
         final boolean useActionBar = this.plugin.getConfig().getBoolean("actionbar.use");
-        String combatOnActionBar = plugin.replaceMsg(player, this.plugin.getConfig().getString("actionbar.on-message"));
 
         String intervalMessage = plugin.getConfig().getString("chat.interval.message");
         List<Integer> intervals = plugin.getConfig().getIntegerList("chat.interval.seconds");
@@ -146,11 +145,9 @@ public class CombatPlayer {
 
         if (useActionBar) {
             this.taskActionBar.put(player.getUniqueId(), Bukkit.getScheduler().scheduleSyncRepeatingTask(this.plugin, () -> {
-                String finalCombatOnActionBar = combatOnActionBar;
+                String finalCombatOnActionBar = plugin.replaceMsg(player, this.plugin.getConfig().getString("actionbar.on-message"));
 
-                finalCombatOnActionBar = finalCombatOnActionBar.replace("{timeRemaining}", Chat.timeFormat(CombatLoggerAPI.timeRemaining(player)));
-                finalCombatOnActionBar = finalCombatOnActionBar.replace("%combatlogger_timeformatted%", Chat.timeFormat(CombatLoggerAPI.timeRemaining(player)));
-                finalCombatOnActionBar = finalCombatOnActionBar.replace("%combatlogger_time%", String.valueOf(CombatLoggerAPI.timeRemaining(player)));
+//                Chat.log(combatOnActionBar);
                 ActionBar.sendActionBar(player, ChatColor.translateAlternateColorCodes('&', finalCombatOnActionBar));
             }, 0, 0));
         }
