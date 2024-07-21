@@ -147,6 +147,10 @@ public class CombatPlayer {
             this.taskActionBar.put(player.getUniqueId(), Bukkit.getScheduler().scheduleSyncRepeatingTask(this.plugin, () -> {
                 String finalCombatOnActionBar = plugin.replaceMsg(player, this.plugin.getConfig().getString("actionbar.on-message"));
 
+                finalCombatOnActionBar = finalCombatOnActionBar.replace("{timeRemaining}", Chat.timeFormat(CombatLoggerAPI.timeRemaining(player)));
+                finalCombatOnActionBar = finalCombatOnActionBar.replace("%combatlogger_timeformatted%", Chat.timeFormat(CombatLoggerAPI.timeRemaining(player)));
+                finalCombatOnActionBar = finalCombatOnActionBar.replace("%combatlogger_time%", String.valueOf(CombatLoggerAPI.timeRemaining(player)));
+
 //                Chat.log(combatOnActionBar);
                 ActionBar.sendActionBar(player, ChatColor.translateAlternateColorCodes('&', finalCombatOnActionBar));
             }, 0, 0));
