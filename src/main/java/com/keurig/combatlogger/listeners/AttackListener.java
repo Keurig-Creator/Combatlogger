@@ -1,6 +1,7 @@
 package com.keurig.combatlogger.listeners;
 
 import com.keurig.combatlogger.CombatLogger;
+import com.keurig.combatlogger.utils.ConfigValue;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
@@ -20,9 +21,15 @@ public class AttackListener implements Listener {
             Player player = null;
 
 
-            if (event.getDamager() instanceof Projectile) {
+            if (event.getDamager() instanceof Projectile projectile) {
+
                 if (((Projectile) event.getDamager()).getShooter() instanceof Player) {
                     player = (Player) ((Projectile) event.getDamager()).getShooter();
+                }
+
+                // Ignore certain projectiles for example snowballs
+                if (ConfigValue.IGNORED_PROJECTILES.contains(projectile.getType())) {
+                    return;
                 }
             } else if (event.getDamager() instanceof Player) {
                 player = (Player) event.getDamager();
