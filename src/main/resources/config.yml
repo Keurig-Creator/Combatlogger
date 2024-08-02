@@ -1,6 +1,12 @@
 # Specifies the duration of combat in seconds
 combat-timer: 15
 
+# Ignored projectiles will not set a tag
+ignored-projectiles:
+  - EGG
+  - ENDER_PEARL
+  - SNOWBALL
+
 chat:
   # Whether the plugin will use chat messages
   use: true
@@ -9,12 +15,12 @@ chat:
   interval:
     # Example will display two chat messages at 10 seconds and 5 seconds
     seconds: [ 10, 5 ]
-    message: '&fYou are now in &6combat &ffor &6%combatlogger_timeformatted%!'
+    message: '&fYou are now in &ccombat &ffor &c%combatlogger_timeformatted%!'
 
   # Message displayed when a player enters combat in chat
-  on-message: '&fYou are now in &6combat&f!'
+  on-message: '&fYou are now in &ccombat&f!'
   # Message displayed when a player leaves combat in chat
-  off-message: '&fYou are now out of &6combat&f!'
+  off-message: '&fYou are now out of &ccombat&f!'
 
 actionbar:
   # Whether the plugin will use action bar messages
@@ -30,12 +36,14 @@ on-combat:
   disable-flight: true
 
   # Forces players into a specific gamemode during combat
-  force-gamemode: survival # Leave empty to disable
-  force-gamemode-message: '&6Your gamemode has been updated.'
+  # User with combatlogger.admin wont be bothered with combat when in creative
+  force-gamemode:
+    mode: SURVIVAL # 'NONE' to disable
+    message: '&cYour gamemode was updated.'
 
 protected-regions:
   # Message displayed when players attempt to enter protected regions while in combat
-  message: '&fYou cannot enter this region while in &6combat&f.'
+  message: '&fYou cannot enter this region while in &ccombat&f.'
   # Interval between sending messages to avoid spamming players' chat feed
   interval: 10
 #  regions:
@@ -47,7 +55,10 @@ blacklisted-worlds:
 
 # List of commands disabled during combat
 blacklisted-commands:
-# - tp
+  - tp
+  - home
+  - spawn
+  - fly
 
 # Message displayed when a player attempts to use a blacklisted command during combat
-blacklisted-command-message: '&fYou cannot &crun&f this command while in &6combat&f!'
+blacklisted-command-message: '&fYou cannot &crun&f this command while in &6combat&f.'
