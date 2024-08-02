@@ -2,6 +2,7 @@ package com.keurig.combatlogger.command;
 
 import com.keurig.combatlogger.CombatLogger;
 import com.keurig.combatlogger.utils.Chat;
+import com.keurig.combatlogger.utils.ConfigValue;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -39,6 +40,8 @@ public class CombatLoggerCommand implements CommandExecutor, TabCompleter {
 
                 plugin.getPunishmentManager().unregisterPunishments();
                 plugin.getPunishmentManager().initializeDefault();
+
+                ConfigValue.loadValues();
                 Chat.message(sender, "&eReloaded configuration...");
             } else if (type.equalsIgnoreCase("info")) {
 
