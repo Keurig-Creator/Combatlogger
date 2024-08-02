@@ -34,11 +34,12 @@ public class PunishmentConfig {
 
         boolean useDefault = true;
 
-        for (String punishment : punishmentMap.keySet()) {
-
-            if (permissionAPI != null && permissionAPI.has(player, punishment)) {
-                useDefault = false;
-                punishments.addAll(punishmentMap.get(punishment));
+        if (config.getBoolean("permissions.enabled", true)) {
+            for (String punishment : punishmentMap.keySet()) {
+                if (permissionAPI != null && permissionAPI.has(player, punishment)) {
+                    useDefault = false;
+                    punishments.addAll(punishmentMap.get(punishment));
+                }
             }
         }
 
@@ -71,20 +72,10 @@ public class PunishmentConfig {
                 fieldName = key;
             }
 
-            Object type = defaultSection.get(key);
-
-
-//            if (!isDataType(type))
-//                continue;
             if (!fieldName.equalsIgnoreCase(punishment.getName()))
                 continue;
 
-//            Chat.log(type.toString());
-//            Chat.log(key);
-
             ConfigurationSection punishmentValues = defaultSection.getConfigurationSection(fieldName);
-
-
             if (punishmentValues != null) {
                 if (!fieldName.isBlank() && !fieldName.isEmpty()) {
                     for (String v : punishmentValues.getKeys(true)) {
@@ -92,19 +83,12 @@ public class PunishmentConfig {
                     }
                 }
             }
-//            if (!fieldName.isBlank() && !fieldName.isEmpty()) {
-//
-//                arguments.put(fieldName.toUpperCase(), type);
-//            }
         }
-
-//        Chat.log(arguments.toString());
         return arguments.isEmpty() ? Collections.emptyMap() : arguments;
     }
 
     public Map<Punishment, Map<String, Object>> getPunishmentArgs(Player player) {
         Map<Punishment, Map<String, Object>> punishments = new HashMap<>();
-
 
         for (Punishment punishment : getPunishments(player)) {
 
@@ -129,13 +113,7 @@ public class PunishmentConfig {
 
                 if (punishmentSection == null) {
                     for (String type : permissions.getStringList(types + ".punishments")) {
-//
-//                        if (types.equalsIgnoreCase(punishment.getName()))
-//                            continue;
-
-
                         if (!type.toUpperCase().equalsIgnoreCase(punishment.getName())) {
-//                                Chat.log(type);
                             continue;
                         }
 
@@ -144,7 +122,6 @@ public class PunishmentConfig {
 
                             if (!arguments.containsKey(type)) {
                                 if (permissionAPI != null && permissionAPI.has(player, permission)) {
-//                                    Chat.log(args.toString());
                                     arguments.putAll(args);
                                 }
                             }
@@ -181,8 +158,6 @@ public class PunishmentConfig {
 
                         // Use the key directly as the fieldName
                         String fieldName = key;
-
-
                         if (!fieldName.isBlank() && !fieldName.isEmpty()) {
                             if (permissionAPI != null && permissionAPI.has(player, permission)) {
                                 arguments.put(fieldName, type);
@@ -194,7 +169,6 @@ public class PunishmentConfig {
                     }
                 }
             }
-
 
             // Put the arguments map into the punishments map for the current punishment
             punishments.put(punishment, arguments);
@@ -219,11 +193,8 @@ public class PunishmentConfig {
         //        message: "&fYour balance has been reduced by &6$1500 &7for logging out during combat."
         //      command: "broadcast &6%player% &flogged out during combat :("
         for (String key : punishmentSection.getKeys(false)) {
-
             Punishment punishment = PunishmentManager.getPunishmentByName(key);
-
             if (punishment != null) {
-//                Chat.log("adding " + key);
                 defaultPunishments.add(punishment);
             }
         }
@@ -236,9 +207,7 @@ public class PunishmentConfig {
         //      - eco
         for (String punish : config.getStringList("default")) {
             Punishment punishment = PunishmentManager.getPunishmentByName(punish);
-
             if (punishment != null) {
-//                Chat.log("adding " + punish);
                 defaultPunishments.add(punishment);
             }
         }
@@ -253,8 +222,6 @@ public class PunishmentConfig {
 
         for (String types : permissions.getKeys(false)) {
             String permisison = permissions.getString(types + ".permission");
-
-
             ConfigurationSection punishmentSection = permissions.getConfigurationSection(types + ".punishments");
 
             // Use hashset instead to save memory and make sure copies cannot exist
@@ -291,7 +258,6 @@ public class PunishmentConfig {
                 }
             }
 
-
             if (permisison != null && !permisison.isEmpty() && !permisison.isBlank()) {
                 punishmentMap.put(permisison, punishments);
             }
@@ -304,7 +270,6 @@ public class PunishmentConfig {
             plugin.saveResource("punishments.yml", false);
 
         }
-
         config = YamlConfiguration.loadConfiguration(file);
     }
 

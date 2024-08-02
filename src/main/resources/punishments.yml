@@ -12,8 +12,9 @@ default:
     message: "&fYour balance has been reduced by &6$1500 &7for logging out during combat."
 #  command: "broadcast &6%player% &flogged out during combat :("
 
-# *Must have a permission plugin to work*
+# Must have a permission plugin to work
 permissions:
+  enabled: false
   # Example permission 'owner' using only economy deduction and use the different ban message
   owner:
     permission: combatlogger.owner
