@@ -8,7 +8,6 @@ import com.keurig.combatlogger.utils.factions.FactionsManager;
 import lombok.Getter;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -68,14 +67,5 @@ public class CombatPlugin extends JavaPlugin {
             return false;
         }
         return permissionAPI != null;
-    }
-
-    /**
-     * @param player get the player tagged check.
-     * @return true if user is tagged else false
-     * @deprecated moved api to CombatLoggerAPI.isTagged(Player)
-     */
-    public boolean isTagged(Player player) {
-        return getCombatPlayer().getCombatLogged().containsKey(player.getUniqueId());
     }
 }

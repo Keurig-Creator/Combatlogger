@@ -30,7 +30,7 @@ public class PlaceholderAPIHook extends PlaceholderExpansion {
         }
 
         if (params.equalsIgnoreCase("timeformatted")) {
-            return Chat.timeFormat(CombatLoggerAPI.getRemainingTime(player));
+            return Chat.timeFormat(CombatLoggerAPI.timeRemaining(player));
         }
 
         return null;

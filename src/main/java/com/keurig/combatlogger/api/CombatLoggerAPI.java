@@ -4,9 +4,6 @@ import com.keurig.combatlogger.CombatLogger;
 import com.keurig.combatlogger.handler.CombatPlayer;
 import org.bukkit.entity.Player;
 
-import java.util.Map;
-import java.util.UUID;
-
 public class CombatLoggerAPI {
 
     /**
@@ -16,8 +13,18 @@ public class CombatLoggerAPI {
      * @return True if the player is tagged in combat, otherwise false.
      */
     public static boolean isTagged(Player player) {
-        final Map<UUID, Long> combatLogged = CombatLogger.getInstance().getCombatPlayer().getCombatLogged();
-        return combatLogged.containsKey(player.getUniqueId()) && combatLogged.get(player.getUniqueId()) > System.currentTimeMillis();
+        return CombatLogger.getInstance().getCombatPlayer().isTagged(player);
+    }
+
+    /**
+     * Retrieves the remaining time in seconds for a player's combat tag.
+     *
+     * @param player The player to query for remaining combat time.
+     * @return The remaining time in milliseconds for the player's combat tag,
+     * or 0 if the player is not currently tagged in combat.
+     */
+    public static int timeRemaining(Player player) {
+        return CombatLogger.getInstance().getCombatPlayer().getTimeRemaining(player);
     }
 
     /**
@@ -34,28 +41,5 @@ public class CombatLoggerAPI {
         } else {
             combatPlayer.removeCombat(player);
         }
-    }
-
-    /**
-     * Retrieves the remaining time in seconds for a player's combat tag.
-     *
-     * @param player The player to query for remaining combat time.
-     * @return The remaining time in milliseconds for the player's combat tag,
-     * or 0 if the player is not currently tagged in combat.
-     */
-    public static long timeRemaining(Player player) {
-        final Map<UUID, Long> combatLogged = CombatLogger.getInstance().getCombatPlayer().getCombatLogged();
-        return isTagged(player) ? combatLogged.get(player.getUniqueId()) - System.currentTimeMillis() : 0;
-    }
-
-    public static long getRemainingTime(Player player) {
-        long remainingTimeMillis = timeRemaining(player);
-        long remainingSeconds = remainingTimeMillis / 1000;
-
-        if (remainingTimeMillis % 1000 >= 500) {
-            remainingSeconds++; // Round up if milliseconds are 500 or more
-        }
-
-        return Math.max(0, remainingSeconds);
     }
 }
