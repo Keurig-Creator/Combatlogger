@@ -1,8 +1,8 @@
 package com.keurig.combatlogger.utils;
 
 import com.keurig.combatlogger.CombatLogger;
+import dev.dejvokep.boostedyaml.YamlDocument;
 import org.bukkit.GameMode;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.EntityType;
 
 import java.util.ArrayList;
@@ -23,22 +23,20 @@ public class ConfigValue {
     public static GameMode FORCE_GAMEMODE;
     public static String FORCE_GAMEMODE_MSG;
     public static Set<EntityType> IGNORED_PROJECTILES;
-    public static Set<EntityType> BLOCKED_PROJECTILES;
+    public static boolean DISABLE_ENDER_PEARLS;
     public static List<Integer> CHAT_INTERVAL;
     public static boolean DISABLE_ELYTRA;
 
     static {
         IGNORED_PROJECTILES = new HashSet<>();
-        BLOCKED_PROJECTILES = new HashSet<>();
         CHAT_INTERVAL = new ArrayList<>();
         loadValues();
     }
 
     public static void loadValues() {
         CombatLogger instance = CombatLogger.getInstance();
-        FileConfiguration config = instance.getConfig();
+        YamlDocument config = instance.config;
 
-        BLOCKED_PROJECTILES.clear();
         IGNORED_PROJECTILES.clear();
         CHAT_INTERVAL.clear();
 
@@ -52,7 +50,7 @@ public class ConfigValue {
         CHAT_MESSAGE_ON = config.getString("chat.on-message");
         CHAT_MESSAGE_OFF = config.getString("chat.off-message");
 
-        CHAT_INTERVAL = config.getIntegerList("chat.interval.seconds");
+        CHAT_INTERVAL = config.getIntList("chat.interval.seconds");
         CHAT_INTERVAL_MESSAGE = config.getString("chat.interval.message");
 
         try {
@@ -70,13 +68,7 @@ public class ConfigValue {
             }
         }
 
-        for (String entity : config.getStringList("blocked-projectiles")) {
-            try {
-                BLOCKED_PROJECTILES.add(EntityType.valueOf(entity.toUpperCase()));
-            } catch (IllegalArgumentException ignored) {
-            }
-        }
-
+        DISABLE_ENDER_PEARLS = config.getBoolean("on-combat.disable-ender-pearls");
         DISABLE_ELYTRA = config.getBoolean("on-combat.disable-elytra");
     }
 }
