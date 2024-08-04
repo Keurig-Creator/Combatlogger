@@ -72,7 +72,10 @@ public class PunishmentManager {
             punishment.setPlayer(player);
             punishment.setPunishmentConfig(config);
 
-            punishment.onQuit(punishment.getName());
+            try {
+                punishment.onQuit(punishment.getName());
+            } catch (Exception e) {
+            }
         }
 //        final List<String> punishmentArgs = plugin.getConfig().getStringList("punishment");
 //
