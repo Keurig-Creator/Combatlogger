@@ -1,6 +1,5 @@
 package com.keurig.combatlogger;
 
-import com.google.common.base.Charsets;
 import com.keurig.combatlogger.command.CombatLoggerCommand;
 import com.keurig.combatlogger.handler.CombatPlayer;
 import com.keurig.combatlogger.listeners.*;
@@ -11,23 +10,30 @@ import com.keurig.combatlogger.utils.Chat;
 import com.keurig.combatlogger.utils.CombatPlugin;
 import com.keurig.combatlogger.utils.PlaceholderAPIHook;
 import com.keurig.combatlogger.utils.factions.FactionsManager;
+import dev.dejvokep.boostedyaml.YamlDocument;
+import dev.dejvokep.boostedyaml.settings.dumper.DumperSettings;
+import dev.dejvokep.boostedyaml.settings.general.GeneralSettings;
+import dev.dejvokep.boostedyaml.settings.loader.LoaderSettings;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import java.io.File;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CombatLogger extends CombatPlugin {
+
+
+    public int spigotVersion;
+    public YamlDocument config;
 
     @Override
     public void onEnable() {
         super.onEnable();
         instance = this;
+        registerConfig();
 
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             placeholderAPIHook = new PlaceholderAPIHook();
@@ -53,7 +59,6 @@ public class CombatLogger extends CombatPlugin {
         }
 
         registerEvents();
-        registerConfig();
 
         getCommand("combatlogger").setExecutor(new CombatLoggerCommand());
 
@@ -76,32 +81,27 @@ public class CombatLogger extends CombatPlugin {
         Bukkit.getPluginManager().registerEvents(new ProjectileListener(), this);
 
         String[] versionComponents = Bukkit.getServer().getBukkitVersion().split("-")[0].split("\\.");
-        int majorVersion = Integer.parseInt(versionComponents[0]);
-        int minorVersion = Integer.parseInt(versionComponents[1]);
+        spigotVersion = Integer.parseInt(versionComponents[0] + versionComponents[1]);
 
-        if (majorVersion > 1 || (majorVersion == 1 && minorVersion >= 9)) {
+
+        if (spigotVersion >= 19) {
             Bukkit.getPluginManager().registerEvents(new ElytraListener(), this);
         }
+
         // Check if there are any regions, if not disable section
-        List<String> regions = getConfig().getStringList("protected-regions.regions");
+        List<String> regions = config.getStringList("protected-regions.regions");
         if (!regions.isEmpty()) {
             Bukkit.getPluginManager().registerEvents(new MoveListener(), this);
         }
     }
 
     public void registerConfig() {
-        InputStream inputStream = getResource("config.yml");
         try {
-            if (inputStream != null) {
-                getConfig().setDefaults(YamlConfiguration.loadConfiguration(new InputStreamReader(inputStream, Charsets.UTF_8)));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+            config = YamlDocument.create(new File(getDataFolder(), "config.yml"), getResource("config.yml"),
+                    GeneralSettings.builder().setDefaultString("").setDefaultList(ArrayList::new).setUseDefaults(false).build(), LoaderSettings.builder().setAutoUpdate(true).build(), DumperSettings.DEFAULT);
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
-
-        deleteOld(getConfig());
-        getConfig().options().copyDefaults(true);
-        saveConfig();
     }
 
     public String replaceMsg(Player player, String message) {
@@ -112,23 +112,23 @@ public class CombatLogger extends CombatPlugin {
         return message;
     }
 
-    private void deleteOld(FileConfiguration config) {
-        String forceGamemode = config.getString("on-combat.force-gamemode");
-
-        if (config.get("on-combat.force-gamemode") instanceof String) {
-            config.set("on-combat.force-gamemode", null);
+    @Override
+    public void saveConfig() {
+        try {
+            if (config != null)
+                config.save();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
+    }
 
-        if (config.getString("on-combat.force-gamemode-message") != null) {
-            config.set("on-combat.force-gamemode-message", null);
-        }
-
-        if (config.get("chat.use") != null) {
-            config.set("chat.use", null);
-        }
-
-        if (config.get("actionbar.use") != null) {
-            config.set("actionbar.use", null);
+    @Override
+    public void reloadConfig() {
+        try {
+            if (config != null)
+                config.reload();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }

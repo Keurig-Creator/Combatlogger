@@ -12,6 +12,7 @@ import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.IOException;
 import java.util.List;
 
 public class CombatLoggerCommand implements CommandExecutor, TabCompleter {
@@ -30,10 +31,19 @@ public class CombatLoggerCommand implements CommandExecutor, TabCompleter {
             String type = args[0];
 
             if (type.equalsIgnoreCase("reload") || type.equalsIgnoreCase("rl")) {
-                plugin.reloadConfig();
-                plugin.registerConfig();
+                try {
+                    plugin.config.reload();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
 
                 plugin.getPunishmentManager().getConfig().reloadConfig();
+
+                try {
+                    plugin.config.save();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
 
                 HandlerList.unregisterAll(plugin);
                 CombatLogger.getInstance().registerEvents();

@@ -7,10 +7,10 @@ import com.keurig.combatlogger.event.PlayerLeaveCombatEvent;
 import com.keurig.combatlogger.task.CombatTask;
 import com.keurig.combatlogger.utils.Chat;
 import com.keurig.combatlogger.utils.ConfigValue;
+import dev.dejvokep.boostedyaml.YamlDocument;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -25,13 +25,13 @@ public class CombatPlayer {
     public final Map<UUID, CombatTask> tag = new HashMap<>();
 
 
-    private final FileConfiguration config;
+    private final YamlDocument config;
 
     public CombatPlayer(CombatLogger plugin) {
         this.plugin = plugin;
 
 
-        this.config = plugin.getConfig();
+        this.config = plugin.config;
     }
 
     public void addCombat(Player player) {

@@ -39,14 +39,14 @@ public class MoveListener implements Listener {
                 eventFrom.setY(eventTo.getY());
             }
 
-            List<String> regionList = plugin.getConfig().getStringList("protected-regions.regions");
+            List<String> regionList = plugin.config.getStringList("protected-regions.regions");
             for (String regions : regionList) {
                 ProtectedRegion region = getRegion(player.getWorld(), regions);
                 if (region == null) return;
 
                 if (region.contains(BukkitAdapter.asBlockVector(eventTo)) && !region.contains(BukkitAdapter.asBlockVector(eventFrom))) {
                     event.setCancelled(true);
-                    Chat.message(player, 5, plugin.getConfig().getString("protected-regions.message"));
+                    Chat.message(player, 5, plugin.config.getString("protected-regions.message"));
                 }
             }
         }

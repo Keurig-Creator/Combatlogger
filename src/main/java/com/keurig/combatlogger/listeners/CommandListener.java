@@ -11,7 +11,7 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
 public class CommandListener implements Listener {
 
-    private CombatLogger plugin;
+    private final CombatLogger plugin;
 
     public CommandListener(CombatLogger plugin) {
         this.plugin = plugin;
@@ -27,9 +27,9 @@ public class CommandListener implements Listener {
             return;
         }
 
-        String str = plugin.replaceMsg(player, plugin.getConfig().getString("blacklisted-command-message"));
+        String str = plugin.replaceMsg(player, plugin.config.getString("blacklisted-command-message"));
 
-        for (String command : plugin.getConfig().getStringList("blacklisted-commands")) {
+        for (String command : plugin.config.getStringList("blacklisted-commands")) {
             if (message.toLowerCase().contains("/" + command.toLowerCase())) {
                 Chat.message(player, str);
                 event.setCancelled(true);

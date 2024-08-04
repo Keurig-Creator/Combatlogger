@@ -43,7 +43,7 @@ public class AttackListener implements Listener {
                 return;
             }
 
-            for (String world : plugin.getConfig().getStringList("blacklisted-worlds")) {
+            for (String world : plugin.config.getStringList("blacklisted-worlds")) {
                 if (player.getWorld().getName().equals(world)) {
                     return;
                 }
