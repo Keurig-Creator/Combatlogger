@@ -6,7 +6,7 @@ default:
   ban: # Ban punishment for logging out during combat
     seconds: 15
     message: "&fYou logged out during &6combat &7\n Please wait %combatlogger_timeformatted%"
-  kill:
+  kill: { }
   eco: # Economy deduction punishment for logging out during combat
     amount: -1500
     message: "&fYour balance has been reduced by &6$1500 &7for logging out during combat."
@@ -29,5 +29,5 @@ permissions:
   express:
     permission: combatlogger.express
     punishments:
-      kill:
+      kill: { }
       command: "broadcast &6%player% &flogged out during combat :("
