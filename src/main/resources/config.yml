@@ -1,13 +1,12 @@
 # Specifies the duration of combat in seconds
 combat-timer: 15
 
+file-version: 1
+
 chat:
   enabled: true
-
-  # Used to display interval chat messages
-  interval:
-    # Example will display two chat messages at 10 seconds and 5 seconds
-    seconds: [ 10, 5 ]
+  interval: # display chat intervals
+    seconds: [ 10, 5 ] # Example will send chat messages out at 10 seconds and 5 seconds
     message: '&fYou are now in &ccombat &ffor &c%combatlogger_timeformatted%!'
 
   # Message displayed when a player enters combat in chat
@@ -27,17 +26,13 @@ on-combat:
   # Disables flight for players in combat
   disable-flight: true
   disable-elytra: false
+  disable-ender-pearls: true
 
   # Forces players into a specific gamemode during combat
   # User with combatlogger.admin wont be bothered with combat when in creative
   force-gamemode:
     mode: SURVIVAL # 'NONE' to disable
     message: '&cYour gamemode was updated.'
-
-# List any projectiles you want blocked able to be used during combat
-# List of all projectiles https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/entity/EntityType.html
-blocked-projectiles:
-  - ENDER_PEARL
 
 # Ignored projectiles will not set a tag
 ignored-projectiles:
@@ -50,12 +45,12 @@ protected-regions:
   message: '&fYou cannot enter this region while in &ccombat&f.'
   # Interval between sending messages to avoid spamming players' chat feed
   interval: 10
-#  regions:
-#    - spawn
+  regions:
+    - spawn
 
 # List of worlds where combat is disabled
-blacklisted-worlds:
-# - world_nether
+blacklisted-worlds: # *uncomment to disable
+  - world_nether
 
 # List of commands disabled during combat
 blacklisted-commands:
