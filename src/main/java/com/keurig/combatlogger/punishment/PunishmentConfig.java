@@ -184,7 +184,6 @@ public class PunishmentConfig {
 
         if (punishmentSection == null)
             return;
-
         // Save the punishments from a configuration section
         // EXAMPLE
         //    punishments:
