@@ -22,9 +22,6 @@ public class BanPunishment extends Punishment {
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-
-        Chat.log("PLayer tried joining");
-
         BanInfo banInfo = BanInfo.get(player.getUniqueId());
         if (banInfo == null) {
             return;
@@ -34,14 +31,6 @@ public class BanPunishment extends Punishment {
             event.setJoinMessage(Chat.color(banInfo.getMessage()));
             player.kickPlayer(Chat.color(banInfo.getMessage()));
         }
-
-//        if (banned.containsKey(player.getUniqueId()) && banned.get(player.getUniqueId()) > System.currentTimeMillis()) {
-//            String message = args[1];
-//            message = message.replace("%combatlogger_timeformatted%", Chat.timeFormat(this.banned.get(player.getUniqueId()) - System.currentTimeMillis(), true));
-//            message = message.replace("{timeRemaining}", Chat.timeFormat(this.banned.get(player.getUniqueId()) - System.currentTimeMillis(), true));
-//            message = CombatLogger.getInstance().replaceMsg(player, message);
-//            player.kickPlayer(Chat.color(message));
-//        }
     }
 
     @Override
