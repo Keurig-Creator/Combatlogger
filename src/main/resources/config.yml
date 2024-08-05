@@ -26,7 +26,7 @@ on-combat:
   # Disables flight for players in combat
   disable-flight: true
   disable-elytra: false
-  disable-ender-pearls: true
+  disable-ender-pearls: false
 
   # Forces players into a specific gamemode during combat
   # User with combatlogger.admin wont be bothered with combat when in creative
