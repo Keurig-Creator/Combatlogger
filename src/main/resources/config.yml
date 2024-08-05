@@ -1,8 +1,6 @@
 # Specifies the duration of combat in seconds
 combat-timer: 15
 
-file-version: 1
-
 chat:
   enabled: true
   interval: # display chat intervals

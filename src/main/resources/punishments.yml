@@ -1,33 +1,40 @@
-# Punishment Configurations
-# Specifies punishments for players who log out during combat.
-# The 'default' section contains punishments that apply to all players unless overridden by specific permissions.
-# Each punishment type can have its own set of arguments, such as duration for bans, amount for economy deductions, and messages to display.
+# Default settings that apply to all users
 default:
-  ban: # Ban punishment for logging out during combat
-    seconds: 15
-    message: "&fYou logged out during &6combat &7\n Please wait %combatlogger_timeformatted%"
-  kill: { }
-  eco: # Economy deduction punishment for logging out during combat
-    amount: -1500
-    message: "&fYour balance has been reduced by &6$1500 &7for logging out during combat."
-#  command: "broadcast &6%player% &flogged out during combat :("
+  punishments:  # List of default punishments for logging out during combat
+    - type: ban
+      parameters:
+        seconds: 15
+        message: |-
+          &fYou logged out during &6combat &7
+          Please wait %combatlogger_timeformatted%
+    - type: eco
+      parameters:
+        amount: -1500
+        message: '&fYour balance has been reduced by &6$1500 &7for logging out during combat.'
+    - type: kill  # Default punishment for killing the player
 
-# Must have a permission plugin to work
+# Optional permissions for users with a permission plugin
+# Permission list is as listed (combatlogger.punishments.owner, ...)
 permissions:
-  enabled: false
-  # Example permission 'owner' using only economy deduction and use the different ban message
-  owner:
-    permission: combatlogger.owner
-    punishments:
-      ban:
-        seconds: 10
-        message: "&4You logged out during &6combat &7\n Please wait %combatlogger_timeformatted%"
-        eco:
+  vip:
+    time: 5  # Time for for VIPs
+    punishments:  # List of punishments specific to VIP users
+      - type: ban
+        parameters:
+          seconds: 10
+          message: "&f#P2W!"  # Ban message for VIP users
+      - type: eco
+        parameters:
           amount: -1500
-          message: "&fYour balance has been reduced by &6$1500 &7for logging out during combat."
-        command: "broadcast &6%player% &flogged out during combat :("
+          message: '&fYour balance has been reduced by &6$1500 &7for logging out during combat.'
+      - type: kill
+      - type: command
+        parameters:
+          command: "broadcast &6%player% &flogged out during combat :("
   express:
-    permission: combatlogger.express
-    punishments:
-      kill: { }
-      command: "broadcast &6%player% &flogged out during combat :("
+
+    punishments:  # List of punishments for express users
+      - type: kill
+      - type: command
+        parameters:
+          command: "broadcast &6%player% &flogged out during combat :("
