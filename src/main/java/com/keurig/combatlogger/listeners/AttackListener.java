@@ -49,8 +49,8 @@ public class AttackListener implements Listener {
                 }
             }
 
-            this.plugin.getCombatPlayer().addCombat(player);
-            this.plugin.getCombatPlayer().addCombat(target);
+            this.plugin.getCombatPlayer().addCombat(player, target.getUniqueId());
+            this.plugin.getCombatPlayer().addCombat(target, player.getUniqueId());
         }
     }
 

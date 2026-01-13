@@ -13,16 +13,21 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Getter
 public class CombatPlayer {
 
     private final CombatLogger plugin;
 
+    // Victim -> task
     public final Map<UUID, CombatTask> tag = new HashMap<>();
+
+    // Victim -> who tagged them (null = no player / unknown)
+    private final Map<UUID, UUID> taggedBy = new HashMap<>();
+
+    // Victim -> when they were tagged (millis)
+    private final Map<UUID, Long> taggedAt = new HashMap<>();
 
     private final YamlDocument config;
 
@@ -31,11 +36,28 @@ public class CombatPlayer {
         this.config = plugin.config;
     }
 
+    /**
+     * Old behavior: tags with no known attacker.
+     */
     public void addCombat(Player player) {
+        addCombat(player, (UUID) null);
+    }
+
+    /**
+     * Tags victim and stores attacker UUID (can be null).
+     */
+    public void addCombat(Player victim, Player attacker) {
+        addCombat(victim, attacker == null ? null : attacker.getUniqueId());
+    }
+
+    /**
+     * Tags victim and stores attacker UUID (can be null).
+     */
+    public void addCombat(Player player, UUID attackerUuid) {
         if (player.hasPermission("combatlogger.admin") && player.getGameMode() == GameMode.CREATIVE)
             return;
 
-        // Retag the player resets timer and wont display combat message again
+        // Retag resets timer and wont display combat message again
         if (isTagged(player)) {
             removePlayer(player);
         } else {
@@ -69,6 +91,10 @@ public class CombatPlayer {
         task.runTaskTimer(plugin, 0, 20L);
         tag.put(player.getUniqueId(), task);
 
+        // Store who tagged who
+        taggedBy.put(player.getUniqueId(), attackerUuid);
+        taggedAt.put(player.getUniqueId(), System.currentTimeMillis());
+
         // Add walls - notify wall manager player entered combat
         if (plugin.getCombatWallManager() != null) {
             plugin.getCombatWallManager().onCombatStart(player);
@@ -98,13 +124,19 @@ public class CombatPlayer {
     }
 
     public void removePlayer(Player player) {
-        if (tag.containsKey(player.getUniqueId())) {
-            CombatTask task = tag.get(player.getUniqueId());
+        UUID id = player.getUniqueId();
+
+        if (tag.containsKey(id)) {
+            CombatTask task = tag.get(id);
             if (task != null) {
                 task.cancel();
             }
-            tag.remove(player.getUniqueId());
+            tag.remove(id);
         }
+
+        // Clear tag metadata too
+        taggedBy.remove(id);
+        taggedAt.remove(id);
     }
 
     public boolean isTagged(Player player) {
@@ -119,4 +151,49 @@ public class CombatPlayer {
         return Math.max(0, remaining); // in combat: 0..timer
     }
 
+    /* =========================
+       API: who tagged who
+       ========================= */
+
+    /**
+     * Returns the UUID of the player who most recently tagged this victim.
+     * Null if unknown / not player-caused / not tagged.
+     */
+    public UUID getTagger(Player victim) {
+        if (victim == null) return null;
+        return taggedBy.get(victim.getUniqueId());
+    }
+
+    /**
+     * Returns true if victim is currently tagged and was tagged by attacker.
+     */
+    public boolean isTaggedBy(Player victim, Player attacker) {
+        if (victim == null || attacker == null) return false;
+        UUID tagger = taggedBy.get(victim.getUniqueId());
+        return tagger != null && tagger.equals(attacker.getUniqueId());
+    }
+
+    /**
+     * When the victim was tagged (millis). Returns -1 if not tagged / unknown.
+     */
+    public long getTaggedAt(Player victim) {
+        if (victim == null) return -1L;
+        return taggedAt.getOrDefault(victim.getUniqueId(), -1L);
+    }
+
+    /**
+     * Returns a list of victim UUIDs currently tagged by attacker.
+     */
+    public List<UUID> getVictimsTaggedBy(Player attacker) {
+        if (attacker == null) return Collections.emptyList();
+        UUID attackerId = attacker.getUniqueId();
+
+        List<UUID> out = new java.util.ArrayList<>();
+        for (Map.Entry<UUID, UUID> entry : taggedBy.entrySet()) {
+            if (attackerId.equals(entry.getValue())) {
+                out.add(entry.getKey());
+            }
+        }
+        return out;
+    }
 }
