@@ -2,7 +2,6 @@ package com.keurig.combatlogger.utils.factions;
 
 import com.keurig.combatlogger.CombatLogger;
 import com.keurig.combatlogger.listeners.CommandFlightListener;
-import com.keurig.combatlogger.utils.Chat;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 
@@ -21,8 +20,6 @@ public class FactionsManager {
             Bukkit.getPluginManager().registerEvents(new CommandFlightListener(), plugin);
 
             this.factionsEnabled = true;
-
-            Chat.log("Enabled FactionsUUID Support");
         } else {
             this.factionsEnabled = false;
         }
