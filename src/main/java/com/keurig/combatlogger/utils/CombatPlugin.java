@@ -5,6 +5,7 @@ import com.keurig.combatlogger.handler.CombatPlayer;
 import com.keurig.combatlogger.punishment.PunishmentManager;
 import com.keurig.combatlogger.utils.factions.FactionsHook;
 import com.keurig.combatlogger.utils.factions.FactionsManager;
+import com.keurig.combatlogger.walls.CombatWallManager;
 import lombok.Getter;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
@@ -44,6 +45,9 @@ public class CombatPlugin extends JavaPlugin {
 
     @Getter
     protected Permission permissionAPI = null;
+
+    @Getter
+    protected CombatWallManager combatWallManager;
 
     protected boolean setupEconomy() {
 

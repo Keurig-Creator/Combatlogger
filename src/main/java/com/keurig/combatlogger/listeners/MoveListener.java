@@ -14,7 +14,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 import java.util.List;
-import java.util.Objects;
 
 public class MoveListener implements Listener {
 
@@ -28,9 +27,6 @@ public class MoveListener implements Listener {
             Location eventTo = event.getTo();
             Location eventFrom = event.getFrom();
 
-            // Allow player to move cursor
-            eventFrom.setYaw(Objects.requireNonNull(eventTo).getYaw());
-            eventFrom.setPitch(Objects.requireNonNull(eventTo).getPitch());
 
             // Allows gravity to happen
             // edits the location the player would be trying to go to i.e y axis only

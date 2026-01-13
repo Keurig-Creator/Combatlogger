@@ -1,6 +1,20 @@
 # Specifies the duration of combat in seconds
 combat-timer: 15
 
+combat-walls:
+  # Enable or disable combat walls globally
+  enabled: true
+
+  # Configure multiple regions - each can have different wall settings
+  regions:
+    spawn:
+      enabled: true
+      wall-material: "RED_STAINED_GLASS"
+      wall-height: 4
+      wall-segment-length: 4
+      border-proximity: 4
+      update-throttle-ms: 100
+      ground-anchor-range: 5  # How many blocks below player to anchor the wall
 chat:
   enabled: true
   interval: # display chat intervals
