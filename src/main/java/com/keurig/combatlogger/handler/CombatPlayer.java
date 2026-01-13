@@ -24,13 +24,10 @@ public class CombatPlayer {
 
     public final Map<UUID, CombatTask> tag = new HashMap<>();
 
-
     private final YamlDocument config;
 
     public CombatPlayer(CombatLogger plugin) {
         this.plugin = plugin;
-
-
         this.config = plugin.config;
     }
 
@@ -71,6 +68,11 @@ public class CombatPlayer {
         CombatTask task = new CombatTask(this, player);
         task.runTaskTimer(plugin, 0, 20L);
         tag.put(player.getUniqueId(), task);
+
+        // Add walls - notify wall manager player entered combat
+        if (plugin.getCombatWallManager() != null) {
+            plugin.getCombatWallManager().onCombatStart(player);
+        }
     }
 
     public void removeCombat(Player player) {
@@ -82,17 +84,25 @@ public class CombatPlayer {
             Chat.message(player, ConfigValue.CHAT_MESSAGE_OFF);
         }
 
-        // Remove the player from the combat logged list.
-        tag.remove(player.getUniqueId());
+        // Remove the player from the combat logged list first
+        removePlayer(player);
 
-        // Call a custom event to signify that the player has left combat.
+        // Call a custom event to signify that the player has left combat
         PlayerLeaveCombatEvent leaveCombatEvent = new PlayerLeaveCombatEvent(player);
         Bukkit.getPluginManager().callEvent(leaveCombatEvent);
+
+        // Remove walls - notify wall manager player left combat
+        if (plugin.getCombatWallManager() != null) {
+            plugin.getCombatWallManager().onCombatEnd(player);
+        }
     }
 
     public void removePlayer(Player player) {
         if (tag.containsKey(player.getUniqueId())) {
-            tag.get(player.getUniqueId()).cancel();
+            CombatTask task = tag.get(player.getUniqueId());
+            if (task != null) {
+                task.cancel();
+            }
             tag.remove(player.getUniqueId());
         }
     }
@@ -102,9 +112,11 @@ public class CombatPlayer {
     }
 
     public int getTimeRemaining(Player player) {
-        if (this.tag.containsKey(player.getUniqueId()))
-            return ConfigValue.COMBAT_TIMER - this.tag.get(player.getUniqueId()).getRuntime();
+        CombatTask task = tag.get(player.getUniqueId());
+        if (task == null) return -1;
 
-        return 0;
+        int remaining = ConfigValue.COMBAT_TIMER - task.getRuntime();
+        return Math.max(0, remaining); // in combat: 0..timer
     }
+
 }
