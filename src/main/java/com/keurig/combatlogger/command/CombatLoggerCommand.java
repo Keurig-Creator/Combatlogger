@@ -50,6 +50,7 @@ public class CombatLoggerCommand implements CommandExecutor, TabCompleter {
 
                 plugin.getPunishmentManager().unregisterPunishments();
                 plugin.getPunishmentManager().initializeDefault();
+                plugin.getCombatWallManager().reloadConfig(plugin.config);
 
                 ConfigValue.loadValues();
                 Chat.message(sender, "&eReloaded configuration...");

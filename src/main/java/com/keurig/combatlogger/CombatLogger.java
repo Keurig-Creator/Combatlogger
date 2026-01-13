@@ -6,10 +6,11 @@ import com.keurig.combatlogger.listeners.*;
 import com.keurig.combatlogger.punishment.PunishmentConfig;
 import com.keurig.combatlogger.punishment.PunishmentManager;
 import com.keurig.combatlogger.punishment.punishments.EcoPunishment;
-import com.keurig.combatlogger.utils.Chat;
 import com.keurig.combatlogger.utils.CombatPlugin;
 import com.keurig.combatlogger.utils.PlaceholderAPIHook;
 import com.keurig.combatlogger.utils.factions.FactionsManager;
+import com.keurig.combatlogger.walls.CombatWallConfig;
+import com.keurig.combatlogger.walls.CombatWallManager;
 import dev.dejvokep.boostedyaml.YamlDocument;
 import dev.dejvokep.boostedyaml.settings.dumper.DumperSettings;
 import dev.dejvokep.boostedyaml.settings.general.GeneralSettings;
@@ -54,9 +55,13 @@ public class CombatLogger extends CombatPlugin {
         factionsHook = this.factionsManager.getFactionsHook();
         this.factionsEnabled = this.factionsManager.isFactionsEnabled();
 
-        if (setupEconomy()) {
-            Chat.log("Ecomony integration has been enabled");
+        setupEconomy();
+
+        CombatWallConfig wallConfig = new CombatWallConfig(config, this);
+        if (wallConfig.validate(this)) {
+            combatWallManager = new CombatWallManager(this, wallConfig);
         }
+
 
         registerEvents();
 
@@ -69,6 +74,9 @@ public class CombatLogger extends CombatPlugin {
 
     @Override
     public void onDisable() {
+        if (combatWallManager != null) {
+            combatWallManager.shutdown();
+        }
         this.punishmentManager.unregisterPunishments();
         EcoPunishment.joinMessages.clear();
     }
@@ -79,6 +87,7 @@ public class CombatLogger extends CombatPlugin {
         Bukkit.getPluginManager().registerEvents(new DeathListener(), this);
         Bukkit.getPluginManager().registerEvents(new CommandListener(this), this);
         Bukkit.getPluginManager().registerEvents(new ProjectileListener(), this);
+        Bukkit.getPluginManager().registerEvents(combatWallManager, this);
 
         String[] versionComponents = Bukkit.getServer().getBukkitVersion().split("-")[0].split("\\.");
         spigotVersion = Integer.parseInt(versionComponents[0] + versionComponents[1]);
