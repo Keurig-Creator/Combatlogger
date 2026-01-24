@@ -6,30 +6,50 @@ import com.keurig.combatlogger.utils.Chat;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.player.PlayerLoginEvent;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 public class BanPunishment extends Punishment {
 
+    // Track players being kicked for combat log ban (to hide their quit message)
+    private static final Set<UUID> pendingKicks = new HashSet<>();
+
+    public static boolean isPendingKick(UUID uuid) {
+        return pendingKicks.remove(uuid);
+    }
 
     public BanPunishment() {
         super("BAN", 2);
     }
 
-    @EventHandler
-    public void onJoin(PlayerJoinEvent event) {
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onLogin(PlayerLoginEvent event) {
         Player player = event.getPlayer();
+
+        // Admins bypass combat log ban
+        if (player.hasPermission("combatlogger.admin")) {
+            BanInfo.remove(player.getUniqueId());
+            return;
+        }
+
         BanInfo banInfo = BanInfo.get(player.getUniqueId());
         if (banInfo == null) {
             return;
         }
 
         if (banInfo.isBanned()) {
-            event.setJoinMessage(Chat.color(banInfo.getMessage()));
-            player.kickPlayer(Chat.color(banInfo.getMessage()));
+            // Deny login entirely - prevents PlayerJoinEvent from firing
+            String message = banInfo.getMessageForLogin(player);
+            event.disallow(PlayerLoginEvent.Result.KICK_OTHER, Chat.color(message != null ? message : "You are banned for combat logging."));
+        } else {
+            // Ban expired, remove it
+            BanInfo.remove(player.getUniqueId());
         }
     }
 
@@ -40,11 +60,16 @@ public class BanPunishment extends Punishment {
         if (player.hasPermission("combatlogger.admin"))
             return;
 
-        String message = getArgs().get("message").toString();
-        String seconds = getArgs().get("seconds").toString();
+        Map<String, Object> args = getArgs();
+        if (args == null || !args.containsKey("message") || !args.containsKey("seconds")) {
+            CombatLogger.getInstance().getLogger().warning("BanPunishment: Missing 'message' or 'seconds' in config for player " + player.getName());
+            return;
+        }
+
+        String message = args.get("message").toString();
+        String seconds = args.get("seconds").toString();
 
         BanInfo.create(player.getUniqueId(), message, System.currentTimeMillis() + (Integer.parseInt(seconds) * 1000));
-
     }
 }
 
@@ -70,16 +95,19 @@ class BanInfo {
 
     public String getMessage() {
         Player player = Bukkit.getPlayer(uuid);
+        return getMessageForLogin(player);
+    }
+
+    public String getMessageForLogin(Player player) {
+        String msg = message;
+        msg = msg.replace("%combatlogger_timeformatted%", Chat.timeFormat(time - System.currentTimeMillis(), true));
+        msg = msg.replace("{timeRemaining}", Chat.timeFormat(time - System.currentTimeMillis(), true));
 
         if (player != null) {
-            String msg = message;
-            msg = msg.replace("%combatlogger_timeformatted%", Chat.timeFormat(time - System.currentTimeMillis(), true));
-            msg = msg.replace("{timeRemaining}", Chat.timeFormat(time - System.currentTimeMillis(), true));
             msg = CombatLogger.getInstance().replaceMsg(player, msg);
-            return msg;
         }
 
-        return null;
+        return msg;
     }
 
     public static BanInfo create(UUID uuid, String message, Long time) {
@@ -88,5 +116,9 @@ class BanInfo {
 
     public static BanInfo get(UUID uuid) {
         return banned.get(uuid);
+    }
+
+    public static void remove(UUID uuid) {
+        banned.remove(uuid);
     }
 }

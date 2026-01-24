@@ -1,75 +1,58 @@
-# Specifies the duration of combat in seconds
 combat-timer: 15
-
 combat-walls:
-  # Enable or disable combat walls globally
   enabled: true
-
-  # Configure multiple regions - each can have different wall settings
   regions:
     spawn:
       enabled: true
-      wall-material: "RED_STAINED_GLASS"
+      wall-material: RED_STAINED_GLASS
       wall-height: 4
       wall-segment-length: 4
       border-proximity: 4
       update-throttle-ms: 100
-      ground-anchor-range: 5  # How many blocks below player to anchor the wall
+      ground-anchor-range: 5
+      
 chat:
   enabled: true
-  interval: # display chat intervals
-    seconds: [ 10, 5 ] # Example will send chat messages out at 10 seconds and 5 seconds
-    message: '&fYou are now in &ccombat &ffor &c%combatlogger_timeformatted%!'
-
-  # Message displayed when a player enters combat in chat
-  on-message: '&fYou are now in &ccombat&f!'
-  # Message displayed when a player leaves combat in chat
-  off-message: '&fYou are now out of &ccombat&f!'
+  interval:
+    seconds:
+      - 10
+      - 5
+    message: '&fCombat time remaining &c%combatlogger_timeformatted%'
+  on-message: '&fYou are now in &ccombat&f.'
+  off-message: '&fYou are no longer in &ccombat&f.'
 
 actionbar:
   enabled: true
-  interval: 0 # leave 0 for no delay in between seconds
-  # Message displayed when a player enters combat in the action bar
-  on-message: '&6You are now in &fcombat &7for %combatlogger_timeformatted%!'
-  # Message displayed when a player leaves combat in the action bar
-  off-message: '&6You are now out of &fcombat&f!'
+  interval: 0
+  on-message: '&fIn combat &c%combatlogger_timeformatted%'
+  off-message: '&fYou are no longer in combat.'
 
 on-combat:
-  # Disables flight for players in combat
   disable-flight: true
   disable-elytra: false
   disable-ender-pearls: false
-
-  # Forces players into a specific gamemode during combat
-  # User with combatlogger.admin wont be bothered with combat when in creative
   force-gamemode:
-    mode: SURVIVAL # 'NONE' to disable
-    message: '&cYour gamemode was updated.'
+    mode: SURVIVAL
+    message: '&fYour gamemode was changed.'
 
-# Ignored projectiles will not set a tag
 ignored-projectiles:
   - EGG
   - ENDER_PEARL
   - SNOWBALL
 
 protected-regions:
-  # Message displayed when players attempt to enter protected regions while in combat
-  message: '&fYou cannot enter this region while in &ccombat&f.'
-  # Interval between sending messages to avoid spamming players' chat feed
+  message: '&fYou cannot enter this region while in combat.'
   interval: 10
   regions:
     - spawn
 
-# List of worlds where combat is disabled
-blacklisted-worlds: # *uncomment to disable
+blacklisted-worlds:
   - world_nether
 
-# List of commands disabled during combat
 blacklisted-commands:
   - tp
   - home
   - spawn
   - fly
 
-# Message displayed when a player attempts to use a blacklisted command during combat
-blacklisted-command-message: '&fYou cannot &crun&f this command while in &6combat&f.'
+blacklisted-command-message: '&fYou cannot use this command while in combat.'

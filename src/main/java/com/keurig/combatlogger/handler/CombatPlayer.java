@@ -144,6 +144,8 @@ public class CombatPlayer {
     }
 
     public int getTimeRemaining(Player player) {
+        if (player == null) return -1;
+
         CombatTask task = tag.get(player.getUniqueId());
         if (task == null) return -1;
 

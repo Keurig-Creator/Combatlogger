@@ -1,40 +1,37 @@
-# Default settings that apply to all users
+#
+# Default punishments
+#
 default:
-  punishments:  # List of default punishments for logging out during combat
-    - type: ban
-      parameters:
-        seconds: 15
-        message: |-
-          &fYou logged out during &6combat &7
-          Please wait %combatlogger_timeformatted%
-    - type: eco
-      parameters:
-        amount: -1500
-        message: '&fYour balance has been reduced by &6$1500 &7for logging out during combat.'
-    - type: kill  # Default punishment for killing the player
+  ban:
+    seconds: 15
+    message: |-
+      &cCombat Log Detected
+      &7You logged out during &6combat&7.
+      &7Please wait &f%combatlogger_timeformatted%&7 before rejoining.
+  eco:
+    amount: -1500
+    message: '&7You lost &6$1,500 &7for logging out during &ccombat&7.'
+  kill: { }
 
-# Optional permissions for users with a permission plugin
-# Permission list is as listed (combatlogger.punishments.owner, ...)
+#
+# Permission-based punishments
+#
 permissions:
+  enabled: false
   vip:
-    time: 5  # Time for for VIPs
-    punishments:  # List of punishments specific to VIP users
-      - type: ban
-        parameters:
-          seconds: 10
-          message: "&f#P2W!"  # Ban message for VIP users
-      - type: eco
-        parameters:
-          amount: -1500
-          message: '&fYour balance has been reduced by &6$1500 &7for logging out during combat.'
-      - type: kill
-      - type: command
-        parameters:
-          command: "broadcast &6%player% &flogged out during combat :("
-  express:
+    permission: "combatlogger.punishments.vip"
+    punishments:
+      ban:
+        seconds: 8
+        message: |-
+          &cCombat Log Detected
+          &7You logged out during &6combat&7.
+          &7Please wait &f%combatlogger_timeformatted%&7 before rejoining.
+      kill: { }
+      command: "broadcast &6%player% &7logged out during &ccombat&7."
 
-    punishments:  # List of punishments for express users
-      - type: kill
-      - type: command
-        parameters:
-          command: "broadcast &6%player% &flogged out during combat :("
+  express:
+    permission: "combatlogger.punishments.express"
+    punishments:
+      kill: { }
+      command: "broadcast &6%player% &7logged out during &ccombat&7."

@@ -17,7 +17,7 @@ public class DeathListener implements Listener {
         Player player = event.getEntity();
         CombatPlayer combatPlayer = this.plugin.getCombatPlayer();
 
-        // Remove combat for the player who died
+        // Remove combat tag when player dies (dying is not combat logging, so no punishment)
         if (combatPlayer.isTagged(player)) {
             combatPlayer.removeCombat(player);
         }

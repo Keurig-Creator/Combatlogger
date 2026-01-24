@@ -26,9 +26,10 @@ public class PunishmentManager {
         plugin = CombatLogger.getInstance();
         punishments = new ArrayList<>();
 
-        config = new PunishmentConfig(plugin, new File(plugin.getDataFolder(), "punishments.yml"));
-
+        // Register punishments BEFORE loading config (so getPunishmentByName works)
         initializeDefault();
+
+        config = new PunishmentConfig(plugin, new File(plugin.getDataFolder(), "punishments.yml"));
     }
 
     public void initializeDefault() {
@@ -67,14 +68,24 @@ public class PunishmentManager {
     }
 
     public void onQuit(Player player) {
-        for (Punishment punishment : config.getPunishments(player)) {
-            punishment.setArgs(config.getPunishmentArgs(player).get(punishment));
+        Set<Punishment> playerPunishments = config.getPunishments(player);
+        Map<Punishment, Map<String, Object>> allArgs = config.getPunishmentArgs(player);
+
+        plugin.getLogger().info("Combat log punishments for " + player.getName() + ": " + playerPunishments.size() + " punishments");
+
+        for (Punishment punishment : playerPunishments) {
+            Map<String, Object> args = allArgs.get(punishment);
+            punishment.setArgs(args);
             punishment.setPlayer(player);
             punishment.setPunishmentConfig(config);
+
+            plugin.getLogger().info("Executing " + punishment.getName() + " with args: " + (args != null ? args.toString() : "null"));
 
             try {
                 punishment.onQuit(punishment.getName());
             } catch (Exception e) {
+                plugin.getLogger().warning("Failed to execute punishment " + punishment.getName() + " for player " + player.getName() + ": " + e.getMessage());
+                e.printStackTrace();
             }
         }
 //        final List<String> punishmentArgs = plugin.getConfig().getStringList("punishment");

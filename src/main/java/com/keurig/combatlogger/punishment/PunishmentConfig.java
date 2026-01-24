@@ -97,8 +97,11 @@ public class PunishmentConfig {
 
             Map<String, Object> args = getDefaultArg(punishment);
 
-            if (permissions == null)
-                return new HashMap<>();
+            if (permissions == null) {
+                // No permissions section, just use default args
+                punishments.put(punishment, args);
+                continue;
+            }
 
             List<String> keys = new ArrayList<>(permissions.getKeys(true));
             Collections.reverse(keys);
@@ -171,9 +174,13 @@ public class PunishmentConfig {
             }
 
             // Put the arguments map into the punishments map for the current punishment
-            punishments.put(punishment, arguments);
+            // If no permission-based args were found, fall back to default args
+            if (arguments.isEmpty()) {
+                punishments.put(punishment, args);
+            } else {
+                punishments.put(punishment, arguments);
+            }
         }
-
 
         return punishments;
     }
@@ -182,19 +189,20 @@ public class PunishmentConfig {
     public void loadDefault() {
         ConfigurationSection punishmentSection = config.getConfigurationSection("default");
 
-        if (punishmentSection == null)
+        if (punishmentSection == null) {
+            plugin.getLogger().warning("No 'default' section found in punishments.yml");
             return;
-        // Save the punishments from a configuration section
-        // EXAMPLE
-        //    punishments:
-        //      eco:
-        //        amount: -1500
-        //        message: "&fYour balance has been reduced by &6$1500 &7for logging out during combat."
-        //      command: "broadcast &6%player% &flogged out during combat :("
+        }
+
+        plugin.getLogger().info("Loading default punishments. Keys found: " + punishmentSection.getKeys(false));
+
         for (String key : punishmentSection.getKeys(false)) {
             Punishment punishment = PunishmentManager.getPunishmentByName(key);
             if (punishment != null) {
                 defaultPunishments.add(punishment);
+                plugin.getLogger().info("Loaded default punishment: " + key);
+            } else {
+                plugin.getLogger().warning("Unknown punishment type in default section: " + key);
             }
         }
 
